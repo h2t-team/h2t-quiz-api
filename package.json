@@ -5,11 +5,11 @@
   "main": "app.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "npm run build && node dist/app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon",
     "_lint": "eslint --config .eslintrc.json",
     "lint": "npm run _lint -- --fix",
-    "format": "prettier  --config .prettierrc"
+    "format": "prettier --write '**/*.{js,ts,md,json}' --config .prettierrc"
   },
   "author": "",
   "license": "ISC",
