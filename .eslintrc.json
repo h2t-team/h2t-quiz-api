@@ -1,12 +1,11 @@
 {
   "env": {
-    "browser": true,
+    "node": true,
     "es2021": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "airbnb",
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -16,6 +15,28 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-console": "error"
+    "max-lines": ["error", 500],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "quotes": ["error", "single"],
+    "curly": "error",
+    "no-console": "error",
+    "camelcase": [
+      "error",
+      {
+        "ignoreDestructuring": true,
+        "ignoreImports": true,
+        "ignoreGlobals": true
+      }
+    ],
+    "prefer-template": "error",
+    "no-var": "error",
+    "no-inline-comments": "error",
+    "no-dupe-keys": "error",
+    "no-dupe-else-if": "error",
+    "no-duplicate-imports": "error",
+    "no-duplicate-case": "error",
+    "no-undef": "error",
+    "no-unused-vars": "error",
+    "valid-typeof": "error"
   }
 }
