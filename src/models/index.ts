@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
+import config from '../config';
 import { initModels } from './init-models';
 
-export const sequelize = new Sequelize(process.env.DB_URI ?? '', {
+export const sequelize = new Sequelize(config.server.dtbUri, {
   dialectOptions: {
     ssl: {
       require: true,
