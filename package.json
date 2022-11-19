@@ -9,7 +9,7 @@
     "dev": "nodemon",
     "_lint": "eslint --config .eslintrc.json",
     "lint": "npm run _lint -- --fix",
-    "format": "prettier --write '**/*.{js,ts,md,json}' --config .prettierrc"
+    "format": "prettier --write **/*.{js,ts,md,json} --config .prettierrc"
   },
   "author": "",
   "license": "ISC",
@@ -28,7 +28,15 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.25.6",
+    "sequelize-auto": "^0.8.8",
+    "uuid": "^9.0.0"
   }
 }
