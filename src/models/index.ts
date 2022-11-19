@@ -1,14 +1,13 @@
 import { Sequelize } from 'sequelize';
-import { AutoOptions, SequelizeAuto } from 'sequelize-auto';
+import { initModels } from './init-models';
 
-export const sequelize = new Sequelize(process.env.DB_URI ?? '');
+export const sequelize = new Sequelize(process.env.DB_URI ?? '', {
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+});
 
-const options: AutoOptions = {
-  caseFile: 'c', caseModel: 'p', caseProp: 'c',
-  directory: './models',
-  singularize: true,
-  useDefine: false
-};
-
-const auto = new SequelizeAuto(sequelize, '', '', options);
-auto.run();
+export const models = initModels(sequelize);
