@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { models } from '../models';
 
-interface FindUserParam {
+interface FindUserParams {
   username?: string;
   email?: string;
 }
 
-const findUser = ({ username = '', email = '' }: FindUserParam) => {
+const findUser = ({ username = '', email = '' }: FindUserParams) => {
   return models.User.findOne({
     raw: true,
     where: {
