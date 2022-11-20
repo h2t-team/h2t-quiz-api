@@ -1,12 +1,10 @@
 import express, { Express } from 'express';
 import createError from 'http-errors';
 import cors from 'cors';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import config from './config';
 
 const app: Express = express();
-const port = process.env.PORT;
+const port = config.server.port;
 
 import { sequelize } from './models';
 import MainRouter from './routes';
@@ -14,6 +12,7 @@ import MainRouter from './routes';
 async function name() {
   try {
     await sequelize.authenticate();
+    // eslint-disable-next-line no-console
     console.log('Connection has been established successfully.');
     app.use(cors());
     app.use(express.json());
@@ -21,7 +20,8 @@ async function name() {
     app.use('/', MainRouter);
 
     app.listen(port, () => {
-      console.log(`⚡️[server]: Server is running`);
+      // eslint-disable-next-line no-console
+      console.log('⚡️[server]: Server is running');
     });
 
     // catch 404 and forward to error handler
@@ -37,8 +37,10 @@ async function name() {
         success: false,
         message: err.message,
       });
+      next();
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Unable to connect to the database:', error);
     process.exit(1);
   }
