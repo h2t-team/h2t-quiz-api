@@ -10,6 +10,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.use('/auth', AuthRouter);
-router.use('/groups', verifyToken, GroupRouter);
+router.use('/groups', GroupRouter);
+// router.use('/groups', verifyToken, GroupRouter);
 
 export default router;

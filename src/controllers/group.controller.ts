@@ -9,7 +9,7 @@ import {
 const getGroupsByUser = async (req: Request, res: Response) => {
   try {
     // TODO: retrieve the user data from the token
-    const userId = 'abc';
+    const userId = '94020a57-cae8-447f-b013-b7b02939d66d';
 
     const groups = await findGroupsByUser(userId);
 
@@ -50,7 +50,7 @@ const getGroupById = async (req: Request, res: Response) => {
 const createNewGroup = async (req: Request, res: Response) => {
   try {
     // TODO: retrieve the user data from the token
-    const userId = 'abc';
+    const userId = '94020a57-cae8-447f-b013-b7b02939d66d';
 
     const { groupName, memberIdList } = req.body;
     if (!groupName || !memberIdList) {
