@@ -59,11 +59,15 @@ const login = async (req: Request, res: Response) => {
       config.jwt.accessTokenSecret,
       { expiresIn: config.jwt.accessTokenExpired },
     );
+    const expiresIn = jwt.verify(
+      accessToken,
+      config.jwt.accessTokenSecret,
+    ) as jwt.JwtPayload;
     res.json({
       success: true,
       message: 'Log in successfully.',
       accessToken,
-      expiresIn: jwt.verify(accessToken, config.jwt.accessTokenSecret).exp,
+      expiresIn: expiresIn.exp,
     });
   } catch (error) {
     res.status(500).json({
