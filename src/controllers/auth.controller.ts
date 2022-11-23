@@ -63,6 +63,7 @@ const login = async (req: Request, res: Response) => {
       success: true,
       message: 'Log in successfully.',
       accessToken,
+      expiresIn: jwt.verify(accessToken, config.jwt.accessTokenSecret).exp,
     });
   } catch (error) {
     res.status(500).json({
