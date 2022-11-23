@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config';
 import { UserRegisterInfo } from '../interfaces/user.interface';
 import { findUser, createUser } from '../services/user.service';
-
+const { OAuth2Client } = require('google-auth-library');
 const register = async (req: Request, res: Response) => {
   const { fullname, email, phone, username, password }: UserRegisterInfo =
     req.body;
@@ -77,4 +77,49 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export { register, login };
+const oAuth2Client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  'postmessage',
+);
+
+const loginWithGoogle = async (req: Request, res: Response) => {
+  const {code} = req.body;
+  if (!code) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information.',
+    });
+  }
+  try {
+    const { tokens } = await oAuth2Client.getToken(code);
+    const accessToken = tokens.access_token;
+    const expiresIn = tokens.expiry_date;
+    const decoded = jwt.decode(tokens.id_token) as jwt.JwtPayload;
+    const username = decoded.sub;
+    const email = decoded.email;
+    const user = await findUser({ username , email });
+    if (user) {
+      return res.json({
+        success: true,
+        message: 'Log in successfully again.',
+        accessToken,
+        expiresIn,
+      });
+    }
+    await createUser(decoded.name, email, "0912345678", username as string, username as string);
+    res.json({
+      success: true,
+      message: 'Log in successfully.',
+      accessToken,
+      expiresIn,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server is not available.',
+    });
+  }
+}
+
+export { register, login, loginWithGoogle };
