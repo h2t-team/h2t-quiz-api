@@ -36,4 +36,16 @@ const createUser = (
   });
 };
 
-export { findUser, createUser };
+const checkEmail = ({ username = '', email = '' }: FindUserParams) => {
+  return models.User.findOne({
+    raw: true,
+    where: {
+      email: email,
+      username: {
+        [Op.not]: username
+      }
+    },
+  });
+};
+
+export { findUser, createUser, checkEmail };
