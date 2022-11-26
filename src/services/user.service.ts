@@ -20,7 +20,7 @@ const findUser = ({ username = '', email = '' }: FindUserParams) => {
 const createUser = (
   fullname: string,
   email: string,
-  phone: string,
+  phone: string | null,
   username: string,
   password: string,
 ) => {
@@ -29,11 +29,23 @@ const createUser = (
     id: uuidv4(),
     fullname,
     email,
-    phone,
+    phone: phone!,
     username,
     password: hashPassword,
     createAt: new Date(),
   });
 };
 
-export { findUser, createUser };
+const checkEmail = ({ username = '', email = '' }: FindUserParams) => {
+  return models.User.findOne({
+    raw: true,
+    where: {
+      email: email,
+      username: {
+        [Op.not]: username
+      }
+    },
+  });
+};
+
+export { findUser, createUser, checkEmail };
