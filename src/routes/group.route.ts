@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { 
-  getGroupById, 
-  getGroupsByUser, 
-  createNewGroup, 
+import {
+  getGroupById,
+  getGroupsByUser,
+  createNewGroup,
   addUsersToExistingGroup,
 } from '../controllers/group.controller';
 

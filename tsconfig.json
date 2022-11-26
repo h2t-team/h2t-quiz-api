@@ -11,6 +11,6 @@
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
-    "moduleResolution": "node",
+    "moduleResolution": "node"
   }
 }

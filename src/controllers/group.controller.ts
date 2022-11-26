@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { 
-  findGroupsByUser, 
-  findGroupById, 
-  createGroup, 
-  addUsersToGroup, 
-} from "../services/group.service";
+import {
+  findGroupsByUser,
+  findGroupById,
+  createGroup,
+  addUsersToGroup,
+} from '../services/group.service';
 
 const getGroupsByUser = async (req: Request, res: Response) => {
   try {
@@ -15,9 +15,7 @@ const getGroupsByUser = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: {
-        groups,
-      },
+      groups,
     });
   } catch (error) {
     res.status(500).json({
@@ -25,19 +23,17 @@ const getGroupsByUser = async (req: Request, res: Response) => {
       message: error,
     });
   }
-}
+};
 
 const getGroupById = async (req: Request, res: Response) => {
   try {
     const groupId: string = req.params.groupId;
 
     const group = await findGroupById(groupId);
-    
-    return res.status(200).json({ 
-      success: true, 
-      data: {
-        group,
-      },
+
+    return res.status(200).json({
+      success: true,
+      group,
     });
   } catch (error) {
     return res.status(500).json({
@@ -45,7 +41,7 @@ const getGroupById = async (req: Request, res: Response) => {
       message: error,
     });
   }
-}
+};
 
 const createNewGroup = async (req: Request, res: Response) => {
   try {
@@ -56,17 +52,17 @@ const createNewGroup = async (req: Request, res: Response) => {
     if (!groupName || !memberIdList) {
       return res.status(400).json({
         success: false,
-        message: 'Missing informations'
+        message: 'Missing informations',
       });
     }
 
     const group = await createGroup(userId, groupName);
-    
+
     const usersInGroup = await addUsersToGroup(group.id, memberIdList);
 
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Create a new group successfully'
+    return res.status(200).json({
+      success: true,
+      message: 'Create a new group successfully',
     });
   } catch (error) {
     return res.status(500).json({
@@ -74,7 +70,7 @@ const createNewGroup = async (req: Request, res: Response) => {
       message: error,
     });
   }
-} 
+};
 
 const addUsersToExistingGroup = async (req: Request, res: Response) => {
   try {
@@ -85,13 +81,13 @@ const addUsersToExistingGroup = async (req: Request, res: Response) => {
     if (!groupdId || !memberIdList) {
       return res.status(400).json({
         success: false,
-        message: 'Missing informations'
+        message: 'Missing informations',
       });
     }
     await addUsersToGroup(groupdId, memberIdList);
     return res.status(200).json({
       success: true,
-      message: 'Add users successfully'
+      message: 'Add users successfully',
     });
   } catch (error) {
     return res.status(500).json({
@@ -99,10 +95,10 @@ const addUsersToExistingGroup = async (req: Request, res: Response) => {
       message: error,
     });
   }
-} 
+};
 
-export { 
-  getGroupsByUser, 
+export {
+  getGroupsByUser,
   getGroupById,
   createNewGroup,
   addUsersToExistingGroup,

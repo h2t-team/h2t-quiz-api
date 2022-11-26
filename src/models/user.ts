@@ -14,12 +14,25 @@ export interface UserAttributes {
   active?: boolean;
 }
 
-export type UserPk = "id";
+export type UserPk = 'id';
 export type UserId = User[UserPk];
-export type UserOptionalAttributes = "fullname" | "email" | "phone" | "username" | "password" | "createAt" | "active";
-export type UserCreationAttributes = Optional<UserAttributes, UserOptionalAttributes>;
+export type UserOptionalAttributes =
+  | 'fullname'
+  | 'email'
+  | 'phone'
+  | 'username'
+  | 'password'
+  | 'createAt'
+  | 'active';
+export type UserCreationAttributes = Optional<
+  UserAttributes,
+  UserOptionalAttributes
+>;
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+export class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes
+{
   id!: string;
   fullname?: string;
   email?: string;
@@ -44,66 +57,88 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   // User hasMany UserInGroup via userId
   userInGroups!: UserInGroup[];
   getUserInGroups!: Sequelize.HasManyGetAssociationsMixin<UserInGroup>;
-  setUserInGroups!: Sequelize.HasManySetAssociationsMixin<UserInGroup, UserInGroupId>;
-  addUserInGroup!: Sequelize.HasManyAddAssociationMixin<UserInGroup, UserInGroupId>;
-  addUserInGroups!: Sequelize.HasManyAddAssociationsMixin<UserInGroup, UserInGroupId>;
+  setUserInGroups!: Sequelize.HasManySetAssociationsMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
+  addUserInGroup!: Sequelize.HasManyAddAssociationMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
+  addUserInGroups!: Sequelize.HasManyAddAssociationsMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
   createUserInGroup!: Sequelize.HasManyCreateAssociationMixin<UserInGroup>;
-  removeUserInGroup!: Sequelize.HasManyRemoveAssociationMixin<UserInGroup, UserInGroupId>;
-  removeUserInGroups!: Sequelize.HasManyRemoveAssociationsMixin<UserInGroup, UserInGroupId>;
-  hasUserInGroup!: Sequelize.HasManyHasAssociationMixin<UserInGroup, UserInGroupId>;
-  hasUserInGroups!: Sequelize.HasManyHasAssociationsMixin<UserInGroup, UserInGroupId>;
+  removeUserInGroup!: Sequelize.HasManyRemoveAssociationMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
+  removeUserInGroups!: Sequelize.HasManyRemoveAssociationsMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
+  hasUserInGroup!: Sequelize.HasManyHasAssociationMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
+  hasUserInGroups!: Sequelize.HasManyHasAssociationsMixin<
+    UserInGroup,
+    UserInGroupId
+  >;
   countUserInGroups!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof User {
-    return User.init({
-    id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true
-    },
-    fullname: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    createAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: 'create_at'
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true
-    }
-  }, {
-    sequelize,
-    tableName: 'user',
-    schema: 'public',
-    timestamps: false,
-    indexes: [
+    return User.init(
       {
-        name: "user_pkey",
-        unique: true,
-        fields: [
-          { name: "id" },
-        ]
+        id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          primaryKey: true,
+        },
+        fullname: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        email: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        phone: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        username: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        password: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        createAt: {
+          type: DataTypes.DATE,
+          allowNull: true,
+          field: 'create_at',
+        },
+        active: {
+          type: DataTypes.BOOLEAN,
+          allowNull: true,
+        },
       },
-    ]
-  });
+      {
+        sequelize,
+        tableName: 'user',
+        schema: 'public',
+        timestamps: false,
+        indexes: [
+          {
+            name: 'user_pkey',
+            unique: true,
+            fields: [{ name: 'id' }],
+          },
+        ],
+      },
+    );
   }
 }
