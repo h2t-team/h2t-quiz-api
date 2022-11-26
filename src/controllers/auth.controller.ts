@@ -117,7 +117,7 @@ const loginWithGoogle = async (req: Request, res: Response) => {
         expiresIn,
       });
     }
-    await createUser(decoded.name, email, "0912345678", username as string, username as string);
+    await createUser(decoded.name, email, null, username as string, username as string);
     res.json({
       success: true,
       message: 'Log in successfully.',

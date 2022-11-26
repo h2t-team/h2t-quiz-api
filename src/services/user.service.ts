@@ -20,7 +20,7 @@ const findUser = ({ username = '', email = '' }: FindUserParams) => {
 const createUser = (
   fullname: string,
   email: string,
-  phone: string,
+  phone: string | null,
   username: string,
   password: string,
 ) => {
@@ -29,7 +29,7 @@ const createUser = (
     id: uuidv4(),
     fullname,
     email,
-    phone,
+    phone: phone!,
     username,
     password: hashPassword,
     createAt: new Date(),
