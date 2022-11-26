@@ -2,14 +2,13 @@ import express, { Express } from 'express';
 import createError from 'http-errors';
 import cors from 'cors';
 import config from './config';
+import { sequelize } from './models';
+import MainRouter from './routes';
 
 const app: Express = express();
 const port = config.server.port;
 
-import { sequelize } from './models';
-import MainRouter from './routes';
-
-async function name() {
+async function runApp() {
   try {
     await sequelize.authenticate();
     // eslint-disable-next-line no-console
@@ -45,4 +44,5 @@ async function name() {
     process.exit(1);
   }
 }
-name();
+
+runApp();
