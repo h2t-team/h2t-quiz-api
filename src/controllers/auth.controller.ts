@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config';
 import { UserRegisterInfo } from '../interfaces/user.interface';
 import { findUser, createUser, checkEmail } from '../services/user.service';
-const { OAuth2Client } = require('google-auth-library');
+import { OAuth2Client } from 'google-auth-library';
 const register = async (req: Request, res: Response) => {
   const { fullname, email, phone, username, password }: UserRegisterInfo =
     req.body;
@@ -84,7 +84,7 @@ const oAuth2Client = new OAuth2Client(
 );
 
 const loginWithGoogle = async (req: Request, res: Response) => {
-  const {code} = req.body;
+  const { code } = req.body;
   if (!code) {
     return res.status(400).json({
       success: false,
@@ -97,18 +97,18 @@ const loginWithGoogle = async (req: Request, res: Response) => {
     const accessToken = tokens.access_token;
     const expiresIn = tokens.expiry_date;
     //get username = id, email
-    const decoded = jwt.decode(tokens.id_token) as jwt.JwtPayload;
+    const decoded = jwt.decode(tokens.id_token as string) as jwt.JwtPayload;
     const username = decoded.sub;
     const email = decoded.email;
     //check if email is taken
-    const isEmailTaken = await checkEmail({username, email});
+    const isEmailTaken = await checkEmail({ username, email });
     if (isEmailTaken) {
       return res.status(409).json({
         success: false,
         message: 'Email is already taken',
       });
     }
-    const user = await findUser({ username , email });
+    const user = await findUser({ username, email });
     if (user) {
       return res.json({
         success: true,
@@ -117,7 +117,13 @@ const loginWithGoogle = async (req: Request, res: Response) => {
         expiresIn,
       });
     }
-    await createUser(decoded.name, email, null, username as string, username as string);
+    await createUser(
+      decoded.name,
+      email,
+      null,
+      username as string,
+      username as string,
+    );
     res.json({
       success: true,
       message: 'Log in successfully.',
@@ -130,6 +136,6 @@ const loginWithGoogle = async (req: Request, res: Response) => {
       message: 'Server is not available.',
     });
   }
-}
+};
 
 export { register, login, loginWithGoogle };
