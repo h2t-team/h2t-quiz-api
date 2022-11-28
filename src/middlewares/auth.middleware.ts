@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import { UserPayload } from 'interfaces/user.interface';
+import jwt, { Secret } from 'jsonwebtoken';
 import config from '../config';
 
 export const verifyToken = (
@@ -9,17 +10,22 @@ export const verifyToken = (
 ) => {
   const token = req.headers.authorization?.split(' ')[1];
 
-  if (!token)
+  if (!token) {
     return res.status(401).json({
-      message: 'Access Denied',
+      message: 'Unauthorized',
     });
+  }
 
   try {
-    const decoded = jwt.verify(token, config.jwt.accessTokenSecret as Secret);
+    const decoded = jwt.verify(
+      token,
+      config.jwt.accessTokenSecret as Secret,
+    ) as UserPayload;
+    req.user = decoded.user;
     next();
   } catch (err) {
-    return res.status(400).json({
-      message: 'Invalid Token',
+    return res.status(403).json({
+      err,
     });
   }
 };

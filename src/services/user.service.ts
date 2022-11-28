@@ -42,8 +42,8 @@ const checkEmail = ({ username = '', email = '' }: FindUserParams) => {
     where: {
       email: email,
       username: {
-        [Op.not]: username
-      }
+        [Op.not]: username,
+      },
     },
   });
 };
