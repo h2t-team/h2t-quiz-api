@@ -17,6 +17,10 @@ const findUser = ({ username = '', email = '' }: FindUserParams) => {
   });
 };
 
+const findUserById = (userId = '') => {
+  return models.User.findByPk(userId);
+};
+
 const createUser = (
   fullname: string,
   email: string,
@@ -48,4 +52,4 @@ const checkEmail = ({ username = '', email = '' }: FindUserParams) => {
   });
 };
 
-export { findUser, createUser, checkEmail };
+export { findUser, createUser, checkEmail, findUserById };

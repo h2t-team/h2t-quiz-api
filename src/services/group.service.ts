@@ -1,6 +1,7 @@
 import { models } from '../models';
 import { v4 as uuidv4 } from 'uuid';
 import { UserInGroupAttributes } from 'models/userInGroup';
+import { Op } from 'sequelize';
 
 const findGroupsByUser = (userId = '') => {
   return models.UserInGroup.findAll({
@@ -93,10 +94,20 @@ const setUserRoleInGroup = (
   );
 };
 
+const findUserInGroup = (groupId = '', userId = '') => {
+  return models.UserInGroup.findOne({
+    raw: true,
+    where: {
+      [Op.and]: [{ groupId }, { userId }],
+    },
+  });
+};
+
 export {
   findGroupsByUser,
   findGroupById,
   createGroup,
   addUsersToGroup,
   setUserRoleInGroup,
+  findUserInGroup,
 };
