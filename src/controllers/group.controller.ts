@@ -72,14 +72,14 @@ const createNewGroup = async (req: Request, res: Response) => {
 
 const addUsersToExistingGroup = async (req: Request, res: Response) => {
   try {
-    const { groupdId, memberIdList } = req.body;
-    if (!groupdId || !memberIdList) {
+    const { groupId, memberIdList } = req.body;
+    if (!groupId || !memberIdList) {
       return res.status(400).json({
         success: false,
         message: 'Missing informations',
       });
     }
-    await addUsersToGroup(groupdId, memberIdList);
+    await addUsersToGroup(groupId, memberIdList);
     return res.status(200).json({
       success: true,
       message: 'Add users successfully',
@@ -96,14 +96,14 @@ const setUserRole = async (req: Request, res: Response) => {
   try {
     const { id: userId } = req.user;
 
-    const { groupdId, role } = req.body;
-    if (!groupdId || !role) {
+    const { groupId, role } = req.body;
+    if (!groupId || !role) {
       return res.status(400).json({
         success: false,
         message: 'Missing informations',
       });
     }
-    await setUserRoleInGroup(groupdId, userId, role);
+    await setUserRoleInGroup(groupId, userId, role);
     return res.status(200).json({
       success: true,
       message: 'Set user role successfully',

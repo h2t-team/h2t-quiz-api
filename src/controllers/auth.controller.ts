@@ -66,6 +66,7 @@ const login = async (req: Request, res: Response) => {
     res.json({
       success: true,
       message: 'Log in successfully.',
+      userId: user.id,
       accessToken,
       expiresIn: expiresIn.exp,
     });
