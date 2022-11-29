@@ -100,7 +100,7 @@ const createNewGroup = async (req: Request, res: Response) => {
 
 const addUsersToExistingGroup = async (req: Request, res: Response) => {
   try {
-    const { id: userId } = req.user;
+    // const { id: userId } = req.user;
     const { groupId } = req.params;
     const { memberIdList }: { groupId: string; memberIdList: string[] } =
       req.body;
@@ -114,14 +114,14 @@ const addUsersToExistingGroup = async (req: Request, res: Response) => {
       });
     }
 
-    const userInGroup = await findUserInGroup(groupId, userId);
+    // const userInGroup = await findUserInGroup(groupId, userId);
 
-    if (userInGroup?.role !== 'owner' && userInGroup?.role !== 'co-owner') {
-      return res.status(403).json({
-        success: false,
-        message: 'You do not have the permission to add users in the group',
-      });
-    }
+    // if (userInGroup?.role !== 'owner' && userInGroup?.role !== 'co-owner') {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: 'You do not have the permission to add users in the group',
+    //   });
+    // }
 
     if (!memberIdList) {
       return res.status(400).json({
