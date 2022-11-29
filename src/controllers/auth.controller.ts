@@ -3,8 +3,15 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import { UserRegisterInfo } from '../interfaces/user.interface';
-import { findUser, createUser, checkEmail } from '../services/user.service';
+import {
+  findUser,
+  createUser,
+  checkEmail,
+  sendActivationEmail,
+  updateAccountActivation,
+} from '../services/user.service';
 import { OAuth2Client } from 'google-auth-library';
+
 const register = async (req: Request, res: Response) => {
   const { fullname, email, phone, username, password }: UserRegisterInfo =
     req.body;
@@ -22,10 +29,25 @@ const register = async (req: Request, res: Response) => {
         message: 'User is already existed.',
       });
     }
-    await createUser(fullname, email, phone, username, password);
-    res.json({ success: true, message: 'User create successfully.' });
+    await createUser(fullname, email, phone, username, password, false);
+    // send active link to email
+    const token = jwt.sign(
+      { username, email },
+      process.env.PRIVATE_KEY as jwt.Secret,
+      { expiresIn: '20m' },
+    );
+    try {
+      await sendActivationEmail(email, token);
+      return res.json({
+        success: true,
+        message: 'Send activation email successfully.',
+        email: email,
+      });
+    } catch (err: any) {
+      return res.status(500).send({ message: err.message });
+    }
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Server is not available.',
     });
@@ -49,6 +71,13 @@ const login = async (req: Request, res: Response) => {
         message: 'Username or password is incorrect.',
       });
     }
+    if (user.active === false) {
+      return res.json({
+        success: true,
+        message: 'Activate before login.',
+        email: user.email,
+      });
+    }
     const accessToken = jwt.sign(
       {
         user: {
@@ -63,7 +92,7 @@ const login = async (req: Request, res: Response) => {
       accessToken,
       config.jwt.accessTokenSecret,
     ) as jwt.JwtPayload;
-    res.json({
+    return res.json({
       success: true,
       message: 'Log in successfully.',
       userId: user.id,
@@ -71,7 +100,8 @@ const login = async (req: Request, res: Response) => {
       expiresIn: expiresIn.exp,
     });
   } catch (error) {
-    res.status(500).json({
+    console.log('error', error);
+    return res.status(500).json({
       success: false,
       message: 'Server is not available.',
     });
@@ -94,13 +124,13 @@ const loginWithGoogle = async (req: Request, res: Response) => {
   }
   try {
     const { tokens } = await oAuth2Client.getToken(code);
-    //get accessToken and expire
+    //get accessToken
     const accessToken = tokens.access_token;
-    const expiresIn = tokens.expiry_date;
     //get username = id, email
-    const decoded = jwt.decode(tokens.id_token as string) as jwt.JwtPayload;
+    const decoded = jwt.decode(tokens.id_token!) as jwt.JwtPayload;
     const username = decoded.sub;
     const email = decoded.email;
+    const expiresIn = decoded.exp;
     //check if email is taken
     const isEmailTaken = await checkEmail({ username, email });
     if (isEmailTaken) {
@@ -124,19 +154,126 @@ const loginWithGoogle = async (req: Request, res: Response) => {
       null,
       username as string,
       username as string,
+      true,
     );
-    res.json({
+    return res.json({
       success: true,
       message: 'Log in successfully.',
       accessToken,
       expiresIn,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Server is not available.',
     });
   }
 };
 
-export { register, login, loginWithGoogle };
+const activateAccount = async (req, res) => {
+  const { token } = req.query;
+  try {
+    if (token) {
+      const decodedToken = jwt.verify(
+        token,
+        process.env.PRIVATE_KEY as jwt.Secret,
+      ) as jwt.JwtPayload;
+      if (!decodedToken) {
+        return res.status(500).json({
+          success: false,
+          message: 'Token validate fail',
+        });
+      }
+      const { username, email } = decodedToken;
+      var user = await findUser({ username, email });
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: 'This account does not exists!',
+        });
+      }
+      if (user.active == true) {
+        return res.json({
+          success: true,
+          message: 'This account has been already activated. Please log in.',
+        });
+      } else {
+        await updateAccountActivation(user.id, true);
+        return res.json({
+          success: true,
+          message: 'Your account has been successfully activated.',
+        });
+      }
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: 'No token found',
+      });
+    }
+  } catch (err: any) {
+    console.log('err', err);
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+const resendEmail = async (req, res) => {
+  const { email, token } = req.body;
+  let newToken = '';
+  let newEmail = '';
+  if (token) {
+    const decodedToken = jwt.decode(token) as jwt.JwtPayload;
+    if (!decodedToken) {
+      return res.status(500).json({
+        success: false,
+        message: 'Token validate fail',
+      });
+    }
+    const { username, email } = decodedToken;
+    var user = await findUser({ username, email });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'This account does not exists!',
+      });
+    }
+    newToken = jwt.sign(
+      { username, email },
+      process.env.PRIVATE_KEY as string,
+      { expiresIn: '20m' },
+    );
+    newEmail = email;
+  } else {
+    const user = await findUser({ email });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'This account does not exists!',
+      });
+    }
+    const username = user?.username;
+    newToken = jwt.sign(
+      { username, email },
+      process.env.PRIVATE_KEY as string,
+      { expiresIn: '20m' },
+    );
+    newEmail = email;
+  }
+  try {
+    await sendActivationEmail(newEmail, newToken);
+    return res.json({
+      success: true,
+      message: 'Send activation email successfully.',
+      email: newEmail,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+export { register, login, loginWithGoogle, activateAccount, resendEmail };
