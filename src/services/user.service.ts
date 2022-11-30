@@ -68,7 +68,7 @@ const sendActivationEmail = async (email, token) => {
 
   transporter.use('compile', hbs(hbsConfig));
 
-  const link = `${process.env.API_URL}/auth/activate-account?token=${token}`;
+  const link = `${process.env.CLIENT_URL}/auth/activate-account?token=${token}`;
   const title = 'Welcome!';
   const description =
     'We are excited to have you get started. First, you need to activate your account. Just press the button below.';
