@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { findUserById } from '../services/user.service';
+import { findUser, findUserById } from '../services/user.service';
 import {
   findGroupsByUser,
   findGroupById,
@@ -7,6 +7,7 @@ import {
   addUsersToGroup,
   setUserRoleInGroup,
   findUserInGroup,
+  sendInvitationEmail,
 } from '../services/group.service';
 
 const getGroupsByUser = async (req: Request, res: Response) => {
@@ -215,10 +216,36 @@ const setUserRole = async (req: Request, res: Response) => {
   }
 };
 
+const inviteUserByEmail = async (req: Request, res: Response) => {
+  const { groupId } = req.params;
+  const { email } = req.body;
+  const group = await findGroupById(groupId);
+  const user = await findUser({ email });
+  const userInGroup = await findUserInGroup(groupId, user?.id);
+  if (userInGroup) {
+    return res.json({
+      success: true,
+      message: 'User is already in group',
+    });
+  }
+  try {
+    await sendInvitationEmail(email, group!);
+    return res.json({
+      success: true,
+      message: 'Send invitation email successfully.',
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 export {
   getGroupsByUser,
   getGroupById,
   createNewGroup,
   addUsersToExistingGroup,
   setUserRole,
+  inviteUserByEmail,
 };
