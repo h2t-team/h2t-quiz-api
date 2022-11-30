@@ -2,6 +2,10 @@ import { models } from '../models';
 import { v4 as uuidv4 } from 'uuid';
 import { UserInGroupAttributes } from 'models/userInGroup';
 import { Op } from 'sequelize';
+import path from 'path';
+import nodemailer from 'nodemailer';
+import hbs from 'nodemailer-express-handlebars';
+import { Group } from 'models/group';
 
 const findGroupsByUser = (userId = '') => {
   return models.UserInGroup.findAll({
@@ -103,6 +107,51 @@ const findUserInGroup = (groupId = '', userId = '') => {
   });
 };
 
+const sendInvitationEmail = async (email: string, group: Group) => {
+  const hbsConfig = {
+    viewEngine: {
+      extName: '.hbs',
+      partialsDir: path.join(__dirname, '../templates/'),
+      layoutsDir: path.join(__dirname, '../templates/'),
+      defaultLayout: '',
+    },
+    viewPath: path.join(__dirname, '../templates/'),
+    extName: '.hbs',
+  };
+
+  const transporter = await nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  transporter.use('compile', hbs(hbsConfig));
+
+  const link = `${process.env.CLIENT_URL}/groups/invite/${group.id}`;
+  const title = 'Invitation to join the group!';
+  const description =
+  `You have been invited to join ${group.name}. To accept the invitaion and get started, click on the button below:`;
+  const button = 'Accept this invitation';
+  var data = { email, link, title, description, button };
+
+  const mailOptions = {
+    from: process.env.EMAIL_USERNAME,
+    to: email,
+    subject: 'Invitation Email - H2T',
+    template: 'emailTemplate',
+    context: data,
+  };
+
+  try {
+    const response = await transporter.sendMail(mailOptions);
+    console.log('Message sent: %s', response);
+  } catch (error) {
+    throw Error('Send activation mail fail');
+  }
+};
+
 export {
   findGroupsByUser,
   findGroupById,
@@ -110,4 +159,5 @@ export {
   addUsersToGroup,
   setUserRoleInGroup,
   findUserInGroup,
+  sendInvitationEmail,
 };
