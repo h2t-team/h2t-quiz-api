@@ -12,6 +12,11 @@ interface FindUserParams {
   email?: string;
 }
 
+interface UpdateUserInfo {
+  fullname?: string;
+  phone?: string;
+}
+
 const findUser = ({ username = '', email = '' }: FindUserParams) => {
   return models.User.findOne({
     raw: true,
@@ -22,7 +27,9 @@ const findUser = ({ username = '', email = '' }: FindUserParams) => {
 };
 
 const findUserById = (userId = '') => {
-  return models.User.findByPk(userId);
+  return models.User.findByPk(userId, {
+    raw: true,
+  });
 };
 
 const createUser = (
@@ -116,6 +123,22 @@ const checkEmail = ({ username = '', email = '' }: FindUserParams) => {
   });
 };
 
+const updateUser = (
+  id: string,
+  fullname: string | undefined,
+  phone: string | undefined,
+) => {
+  const updateOption: UpdateUserInfo = {};
+  if (fullname) {
+    updateOption.fullname = fullname;
+  }
+  if (phone) {
+    updateOption.phone = phone;
+  }
+  return models.User.update(updateOption, {
+    where: { id },
+  });
+};
 export {
   findUser,
   findUserById,
@@ -123,4 +146,5 @@ export {
   checkEmail,
   sendActivationEmail,
   updateAccountActivation,
+  updateUser,
 };

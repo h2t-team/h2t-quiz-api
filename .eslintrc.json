@@ -38,6 +38,7 @@
     "no-duplicate-case": "error",
     "no-undef": "error",
     "no-unused-vars": "error",
-    "valid-typeof": "error"
+    "valid-typeof": "error",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
 }
