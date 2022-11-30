@@ -100,7 +100,6 @@ const login = async (req: Request, res: Response) => {
       expiresIn: expiresIn.exp,
     });
   } catch (error) {
-    console.log('error', error);
     return res.status(500).json({
       success: false,
       message: 'Server is not available.',
@@ -185,7 +184,7 @@ const activateAccount = async (req, res) => {
         });
       }
       const { username, email } = decodedToken;
-      var user = await findUser({ username, email });
+      const user = await findUser({ username, email });
       if (!user) {
         return res.status(401).json({
           success: false,
@@ -211,7 +210,6 @@ const activateAccount = async (req, res) => {
       });
     }
   } catch (err: any) {
-    console.log('err', err);
     return res.status(500).json({
       success: false,
       message: err.message,
@@ -232,7 +230,7 @@ const resendEmail = async (req, res) => {
       });
     }
     const { username, email } = decodedToken;
-    var user = await findUser({ username, email });
+    const user = await findUser({ username, email });
     if (!user) {
       return res.status(401).json({
         success: false,

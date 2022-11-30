@@ -80,7 +80,7 @@ const sendActivationEmail = async (email, token) => {
   const description =
     'We are excited to have you get started. First, you need to activate your account. Just press the button below.';
   const button = 'Activate Account';
-  var data = { email, link, title, description, button };
+  const data = { email, link, title, description, button };
 
   const mailOptions = {
     from: process.env.EMAIL_USERNAME,
@@ -91,14 +91,13 @@ const sendActivationEmail = async (email, token) => {
   };
 
   try {
-    const response = await transporter.sendMail(mailOptions);
-    console.log('Message sent: %s', response);
+    await transporter.sendMail(mailOptions);
   } catch (error) {
     throw Error('Send activation mail fail');
   }
 };
 
-const updateAccountActivation = async (id, active) => {
+const updateAccountActivation = async (id: string, active: boolean) => {
   return await models.User.update(
     {
       active: active,

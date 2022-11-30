@@ -131,10 +131,9 @@ const sendInvitationEmail = async (email: string, group: Group) => {
 
   const link = `${process.env.CLIENT_URL}/groups/invite/${group.id}`;
   const title = 'Invitation to join the group!';
-  const description =
-  `You have been invited to join ${group.name}. To accept the invitaion and get started, click on the button below:`;
+  const description = `You have been invited to join ${group.name}. To accept the invitaion and get started, click on the button below:`;
   const button = 'Accept this invitation';
-  var data = { email, link, title, description, button };
+  const data = { email, link, title, description, button };
 
   const mailOptions = {
     from: process.env.EMAIL_USERNAME,
@@ -145,8 +144,7 @@ const sendInvitationEmail = async (email: string, group: Group) => {
   };
 
   try {
-    const response = await transporter.sendMail(mailOptions);
-    console.log('Message sent: %s', response);
+    await transporter.sendMail(mailOptions);
   } catch (error) {
     throw Error('Send activation mail fail');
   }
