@@ -1,65 +1,69 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { slide, slideId } from './slide';
+import type { Slide, SlideId } from './slide';
 
-export interface pollSlideAttributes {
-  id: number;
-  slideId?: number;
-  option?: string;
-  amount?: number;
+export interface PollSlideAttributes {
+  Id: number;
+  SlideId?: number;
+  Option?: string;
+  Amount?: number;
 }
 
-export type pollSlidePk = 'id';
-export type pollSlideId = pollSlide[pollSlidePk];
-export type pollSlideOptionalAttributes =
-  | 'id'
-  | 'slideId'
-  | 'option'
-  | 'amount';
-export type pollSlideCreationAttributes = Optional<
-  pollSlideAttributes,
-  pollSlideOptionalAttributes
+export type PollSlidePk = 'Id';
+export type PollSlideId = PollSlide[PollSlidePk];
+export type PollSlideOptionalAttributes =
+  | 'Id'
+  | 'SlideId'
+  | 'Option'
+  | 'Amount';
+export type PollSlideCreationAttributes = Optional<
+  PollSlideAttributes,
+  PollSlideOptionalAttributes
 >;
 
-export class pollSlide
-  extends Model<pollSlideAttributes, pollSlideCreationAttributes>
-  implements pollSlideAttributes
+export class PollSlide
+  extends Model<PollSlideAttributes, PollSlideCreationAttributes>
+  implements PollSlideAttributes
 {
-  id!: number;
-  slideId?: number;
-  option?: string;
-  amount?: number;
+  Id!: number;
+  SlideId?: number;
+  Option?: string;
+  Amount?: number;
 
-  // pollSlide belongsTo slide via slideId
-  slide!: slide;
-  getSlide!: Sequelize.BelongsToGetAssociationMixin<slide>;
-  setSlide!: Sequelize.BelongsToSetAssociationMixin<slide, slideId>;
-  createSlide!: Sequelize.BelongsToCreateAssociationMixin<slide>;
+  // PollSlide belongsTo Slide via SlideId
+  Slide!: Slide;
+  getSlide!: Sequelize.BelongsToGetAssociationMixin<Slide>;
+  setSlide!: Sequelize.BelongsToSetAssociationMixin<Slide, SlideId>;
+  createSlide!: Sequelize.BelongsToCreateAssociationMixin<Slide>;
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof pollSlide {
-    return pollSlide.init(
+  static initModel(sequelize: Sequelize.Sequelize): typeof PollSlide {
+    return PollSlide.init(
       {
-        id: {
+        Id: {
           autoIncrement: true,
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
+          field: 'id',
         },
-        slideId: {
+        SlideId: {
           type: DataTypes.INTEGER,
           allowNull: true,
           references: {
             model: 'slide',
             key: 'id',
           },
+          field: 'slideId',
         },
-        option: {
+        Option: {
           type: DataTypes.STRING,
           allowNull: true,
+          field: 'option',
         },
-        amount: {
+        Amount: {
           type: DataTypes.INTEGER,
           allowNull: true,
+          field: 'amount',
         },
       },
       {

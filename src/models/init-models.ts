@@ -1,77 +1,77 @@
 import type { Sequelize } from 'sequelize';
-import { group as _group } from './group';
-import type { groupAttributes, groupCreationAttributes } from './group';
-import { pollSlide as _pollSlide } from './pollSlide';
+import { Group as _Group } from './group';
+import type { GroupAttributes, GroupCreationAttributes } from './group';
+import { PollSlide as _PollSlide } from './pollSlide';
 import type {
-  pollSlideAttributes,
-  pollSlideCreationAttributes,
+  PollSlideAttributes,
+  PollSlideCreationAttributes,
 } from './pollSlide';
-import { presentation as _presentation } from './presentation';
+import { Presentation as _Presentation } from './presentation';
 import type {
-  presentationAttributes,
-  presentationCreationAttributes,
+  PresentationAttributes,
+  PresentationCreationAttributes,
 } from './presentation';
-import { slide as _slide } from './slide';
-import type { slideAttributes, slideCreationAttributes } from './slide';
-import { user as _user } from './user';
-import type { userAttributes, userCreationAttributes } from './user';
-import { userInGroup as _userInGroup } from './userInGroup';
+import { Slide as _Slide } from './slide';
+import type { SlideAttributes, SlideCreationAttributes } from './slide';
+import { User as _User } from './user';
+import type { UserAttributes, UserCreationAttributes } from './user';
+import { UserInGroup as _UserInGroup } from './userInGroup';
 import type {
-  userInGroupAttributes,
-  userInGroupCreationAttributes,
+  UserInGroupAttributes,
+  UserInGroupCreationAttributes,
 } from './userInGroup';
 
 export {
-  _group as group,
-  _pollSlide as pollSlide,
-  _presentation as presentation,
-  _slide as slide,
-  _user as user,
-  _userInGroup as userInGroup,
+  _Group as Group,
+  _PollSlide as PollSlide,
+  _Presentation as Presentation,
+  _Slide as Slide,
+  _User as User,
+  _UserInGroup as UserInGroup,
 };
 
 export type {
-  groupAttributes,
-  groupCreationAttributes,
-  pollSlideAttributes,
-  pollSlideCreationAttributes,
-  presentationAttributes,
-  presentationCreationAttributes,
-  slideAttributes,
-  slideCreationAttributes,
-  userAttributes,
-  userCreationAttributes,
-  userInGroupAttributes,
-  userInGroupCreationAttributes,
+  GroupAttributes,
+  GroupCreationAttributes,
+  PollSlideAttributes,
+  PollSlideCreationAttributes,
+  PresentationAttributes,
+  PresentationCreationAttributes,
+  SlideAttributes,
+  SlideCreationAttributes,
+  UserAttributes,
+  UserCreationAttributes,
+  UserInGroupAttributes,
+  UserInGroupCreationAttributes,
 };
 
 export function initModels(sequelize: Sequelize) {
-  const group = _group.initModel(sequelize);
-  const pollSlide = _pollSlide.initModel(sequelize);
-  const presentation = _presentation.initModel(sequelize);
-  const slide = _slide.initModel(sequelize);
-  const user = _user.initModel(sequelize);
-  const userInGroup = _userInGroup.initModel(sequelize);
+  const Group = _Group.initModel(sequelize);
+  const PollSlide = _PollSlide.initModel(sequelize);
+  const Presentation = _Presentation.initModel(sequelize);
+  const Slide = _Slide.initModel(sequelize);
+  const User = _User.initModel(sequelize);
+  const UserInGroup = _UserInGroup.initModel(sequelize);
 
-  userInGroup.belongsTo(group, { as: 'group', foreignKey: 'groupId' });
-  group.hasMany(userInGroup, { as: 'userInGroups', foreignKey: 'groupId' });
-  slide.belongsTo(presentation, { as: 'present', foreignKey: 'presentId' });
-  presentation.hasMany(slide, { as: 'slides', foreignKey: 'presentId' });
-  pollSlide.belongsTo(slide, { as: 'slide', foreignKey: 'slideId' });
-  slide.hasMany(pollSlide, { as: 'pollSlides', foreignKey: 'slideId' });
-  group.belongsTo(user, { as: 'ownerUser', foreignKey: 'owner' });
-  user.hasMany(group, { as: 'groups', foreignKey: 'owner' });
-  presentation.belongsTo(user, { as: 'user', foreignKey: 'userId' });
-  user.hasMany(presentation, { as: 'presentations', foreignKey: 'userId' });
-  userInGroup.belongsTo(user, { as: 'user', foreignKey: 'userId' });
-  user.hasMany(userInGroup, { as: 'userInGroups', foreignKey: 'userId' });
+  UserInGroup.belongsTo(Group, { as: 'Group', foreignKey: 'GroupId' });
+  Group.hasMany(UserInGroup, { as: 'UserInGroups', foreignKey: 'GroupId' });
+  Slide.belongsTo(Presentation, { as: 'Present', foreignKey: 'PresentId' });
+  Presentation.hasMany(Slide, { as: 'Slides', foreignKey: 'PresentId' });
+  PollSlide.belongsTo(Slide, { as: 'Slide', foreignKey: 'SlideId' });
+  Slide.hasMany(PollSlide, { as: 'PollSlides', foreignKey: 'SlideId' });
+  Group.belongsTo(User, { as: 'OwnerUser', foreignKey: 'Owner' });
+  User.hasMany(Group, { as: 'Groups', foreignKey: 'Owner' });
+  Presentation.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
+  User.hasMany(Presentation, { as: 'Presentations', foreignKey: 'UserId' });
+  UserInGroup.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
+  User.hasMany(UserInGroup, { as: 'UserInGroups', foreignKey: 'UserId' });
 
   return {
-    group: group,
-    pollSlide: pollSlide,
-    presentation: presentation,
-    slide: slide,
-    user: user,
-    userInGroup: userInGroup,
+    Group: Group,
+    PollSlide: PollSlide,
+    Presentation: Presentation,
+    Slide: Slide,
+    User: User,
+    UserInGroup: UserInGroup,
   };
 }
