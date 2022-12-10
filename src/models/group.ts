@@ -4,14 +4,14 @@ import type { User, UserId } from './user';
 import type { UserInGroup, UserInGroupId } from './userInGroup';
 
 export interface GroupAttributes {
-  Id: string;
-  Name?: string;
-  Owner?: string;
+  id: string;
+  name?: string;
+  owner?: string;
 }
 
-export type GroupPk = 'Id';
+export type GroupPk = 'id';
 export type GroupId = Group[GroupPk];
-export type GroupOptionalAttributes = 'Name' | 'Owner';
+export type GroupOptionalAttributes = 'name' | 'owner';
 export type GroupCreationAttributes = Optional<
   GroupAttributes,
   GroupOptionalAttributes
@@ -21,12 +21,12 @@ export class Group
   extends Model<GroupAttributes, GroupCreationAttributes>
   implements GroupAttributes
 {
-  Id!: string;
-  Name?: string;
-  Owner?: string;
+  id!: string;
+  name?: string;
+  owner?: string;
 
-  // Group hasMany UserInGroup via GroupId
-  UserInGroups!: UserInGroup[];
+  // Group hasMany UserInGroup via groupId
+  userInGroups!: UserInGroup[];
   getUserInGroups!: Sequelize.HasManyGetAssociationsMixin<UserInGroup>;
   setUserInGroups!: Sequelize.HasManySetAssociationsMixin<
     UserInGroup,
@@ -58,8 +58,8 @@ export class Group
     UserInGroupId
   >;
   countUserInGroups!: Sequelize.HasManyCountAssociationsMixin;
-  // Group belongsTo User via Owner
-  OwnerUser!: User;
+  // Group belongsTo User via owner
+  ownerUser!: User;
   getOwnerUser!: Sequelize.BelongsToGetAssociationMixin<User>;
   setOwnerUser!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
   createOwnerUser!: Sequelize.BelongsToCreateAssociationMixin<User>;
@@ -67,25 +67,22 @@ export class Group
   static initModel(sequelize: Sequelize.Sequelize): typeof Group {
     return Group.init(
       {
-        Id: {
+        id: {
           type: DataTypes.STRING,
           allowNull: false,
           primaryKey: true,
-          field: 'id',
         },
-        Name: {
+        name: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'name',
         },
-        Owner: {
+        owner: {
           type: DataTypes.STRING,
           allowNull: true,
           references: {
             model: 'user',
             key: 'id',
           },
-          field: 'owner',
         },
       },
       {

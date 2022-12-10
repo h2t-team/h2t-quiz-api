@@ -53,18 +53,18 @@ export function initModels(sequelize: Sequelize) {
   const User = _User.initModel(sequelize);
   const UserInGroup = _UserInGroup.initModel(sequelize);
 
-  UserInGroup.belongsTo(Group, { as: 'Group', foreignKey: 'GroupId' });
-  Group.hasMany(UserInGroup, { as: 'UserInGroups', foreignKey: 'GroupId' });
-  Slide.belongsTo(Presentation, { as: 'Present', foreignKey: 'PresentId' });
-  Presentation.hasMany(Slide, { as: 'Slides', foreignKey: 'PresentId' });
-  PollSlide.belongsTo(Slide, { as: 'Slide', foreignKey: 'SlideId' });
-  Slide.hasMany(PollSlide, { as: 'PollSlides', foreignKey: 'SlideId' });
-  Group.belongsTo(User, { as: 'OwnerUser', foreignKey: 'Owner' });
-  User.hasMany(Group, { as: 'Groups', foreignKey: 'Owner' });
-  Presentation.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
-  User.hasMany(Presentation, { as: 'Presentations', foreignKey: 'UserId' });
-  UserInGroup.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
-  User.hasMany(UserInGroup, { as: 'UserInGroups', foreignKey: 'UserId' });
+  UserInGroup.belongsTo(Group, { as: 'group', foreignKey: 'groupId' });
+  Group.hasMany(UserInGroup, { as: 'userInGroups', foreignKey: 'groupId' });
+  Slide.belongsTo(Presentation, { as: 'present', foreignKey: 'presentId' });
+  Presentation.hasMany(Slide, { as: 'slides', foreignKey: 'presentId' });
+  PollSlide.belongsTo(Slide, { as: 'slide', foreignKey: 'slideId' });
+  Slide.hasMany(PollSlide, { as: 'pollSlides', foreignKey: 'slideId' });
+  Group.belongsTo(User, { as: 'ownerUser', foreignKey: 'owner' });
+  User.hasMany(Group, { as: 'groups', foreignKey: 'owner' });
+  Presentation.belongsTo(User, { as: 'user', foreignKey: 'userId' });
+  User.hasMany(Presentation, { as: 'presentations', foreignKey: 'userId' });
+  UserInGroup.belongsTo(User, { as: 'user', foreignKey: 'userId' });
+  User.hasMany(UserInGroup, { as: 'userInGroups', foreignKey: 'userId' });
 
   return {
     Group: Group,

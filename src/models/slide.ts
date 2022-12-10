@@ -4,15 +4,15 @@ import type { PollSlide, PollSlideId } from './pollSlide';
 import type { Presentation, PresentationId } from './presentation';
 
 export interface SlideAttributes {
-  Id: number;
-  PresentId?: string;
-  Title?: string;
-  Index?: number;
+  id: number;
+  presentId?: string;
+  title?: string;
+  index?: number;
 }
 
-export type SlidePk = 'Id';
+export type SlidePk = 'id';
 export type SlideId = Slide[SlidePk];
-export type SlideOptionalAttributes = 'Id' | 'PresentId' | 'Title' | 'Index';
+export type SlideOptionalAttributes = 'id' | 'presentId' | 'title' | 'index';
 export type SlideCreationAttributes = Optional<
   SlideAttributes,
   SlideOptionalAttributes
@@ -22,21 +22,21 @@ export class Slide
   extends Model<SlideAttributes, SlideCreationAttributes>
   implements SlideAttributes
 {
-  Id!: number;
-  PresentId?: string;
-  Title?: string;
-  Index?: number;
+  id!: number;
+  presentId?: string;
+  title?: string;
+  index?: number;
 
-  // Slide belongsTo Presentation via PresentId
-  Present!: Presentation;
+  // Slide belongsTo Presentation via presentId
+  present!: Presentation;
   getPresent!: Sequelize.BelongsToGetAssociationMixin<Presentation>;
   setPresent!: Sequelize.BelongsToSetAssociationMixin<
     Presentation,
     PresentationId
   >;
   createPresent!: Sequelize.BelongsToCreateAssociationMixin<Presentation>;
-  // Slide hasMany PollSlide via SlideId
-  PollSlides!: PollSlide[];
+  // Slide hasMany PollSlide via slideId
+  pollSlides!: PollSlide[];
   getPollSlides!: Sequelize.HasManyGetAssociationsMixin<PollSlide>;
   setPollSlides!: Sequelize.HasManySetAssociationsMixin<PollSlide, PollSlideId>;
   addPollSlide!: Sequelize.HasManyAddAssociationMixin<PollSlide, PollSlideId>;
@@ -57,31 +57,27 @@ export class Slide
   static initModel(sequelize: Sequelize.Sequelize): typeof Slide {
     return Slide.init(
       {
-        Id: {
+        id: {
           autoIncrement: true,
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
-          field: 'id',
         },
-        PresentId: {
+        presentId: {
           type: DataTypes.STRING,
           allowNull: true,
           references: {
             model: 'presentation',
             key: 'id',
           },
-          field: 'presentId',
         },
-        Title: {
+        title: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'title',
         },
-        Index: {
+        index: {
           type: DataTypes.INTEGER,
           allowNull: true,
-          field: 'index',
         },
       },
       {

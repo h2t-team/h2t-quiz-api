@@ -5,24 +5,24 @@ import type { Presentation, PresentationId } from './presentation';
 import type { UserInGroup, UserInGroupId } from './userInGroup';
 
 export interface UserAttributes {
-  Id: string;
-  Fullname?: string;
-  Email?: string;
-  Phone?: string;
-  Username?: string;
-  Password?: string;
-  CreateAt?: Date;
+  id: string;
+  fullname?: string;
+  email?: string;
+  phone?: string;
+  username?: string;
+  password?: string;
+  createAt?: Date;
 }
 
-export type UserPk = 'Id';
+export type UserPk = 'id';
 export type UserId = User[UserPk];
 export type UserOptionalAttributes =
-  | 'Fullname'
-  | 'Email'
-  | 'Phone'
-  | 'Username'
-  | 'Password'
-  | 'CreateAt';
+  | 'fullname'
+  | 'email'
+  | 'phone'
+  | 'username'
+  | 'password'
+  | 'createAt';
 export type UserCreationAttributes = Optional<
   UserAttributes,
   UserOptionalAttributes
@@ -32,16 +32,16 @@ export class User
   extends Model<UserAttributes, UserCreationAttributes>
   implements UserAttributes
 {
-  Id!: string;
-  Fullname?: string;
-  Email?: string;
-  Phone?: string;
-  Username?: string;
-  Password?: string;
-  CreateAt?: Date;
+  id!: string;
+  fullname?: string;
+  email?: string;
+  phone?: string;
+  username?: string;
+  password?: string;
+  createAt?: Date;
 
-  // User hasMany Group via Owner
-  Groups!: Group[];
+  // User hasMany Group via owner
+  groups!: Group[];
   getGroups!: Sequelize.HasManyGetAssociationsMixin<Group>;
   setGroups!: Sequelize.HasManySetAssociationsMixin<Group, GroupId>;
   addGroup!: Sequelize.HasManyAddAssociationMixin<Group, GroupId>;
@@ -52,8 +52,8 @@ export class User
   hasGroup!: Sequelize.HasManyHasAssociationMixin<Group, GroupId>;
   hasGroups!: Sequelize.HasManyHasAssociationsMixin<Group, GroupId>;
   countGroups!: Sequelize.HasManyCountAssociationsMixin;
-  // User hasMany Presentation via UserId
-  Presentations!: Presentation[];
+  // User hasMany Presentation via userId
+  presentations!: Presentation[];
   getPresentations!: Sequelize.HasManyGetAssociationsMixin<Presentation>;
   setPresentations!: Sequelize.HasManySetAssociationsMixin<
     Presentation,
@@ -85,8 +85,8 @@ export class User
     PresentationId
   >;
   countPresentations!: Sequelize.HasManyCountAssociationsMixin;
-  // User hasMany UserInGroup via UserId
-  UserInGroups!: UserInGroup[];
+  // User hasMany UserInGroup via userId
+  userInGroups!: UserInGroup[];
   getUserInGroups!: Sequelize.HasManyGetAssociationsMixin<UserInGroup>;
   setUserInGroups!: Sequelize.HasManySetAssociationsMixin<
     UserInGroup,
@@ -122,38 +122,32 @@ export class User
   static initModel(sequelize: Sequelize.Sequelize): typeof User {
     return User.init(
       {
-        Id: {
+        id: {
           type: DataTypes.STRING,
           allowNull: false,
           primaryKey: true,
-          field: 'id',
         },
-        Fullname: {
+        fullname: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'fullname',
         },
-        Email: {
+        email: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'email',
         },
-        Phone: {
+        phone: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'phone',
         },
-        Username: {
+        username: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'username',
         },
-        Password: {
+        password: {
           type: DataTypes.STRING,
           allowNull: true,
-          field: 'password',
         },
-        CreateAt: {
+        createAt: {
           type: DataTypes.DATE,
           allowNull: true,
           field: 'create_at',
