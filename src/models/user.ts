@@ -12,6 +12,7 @@ export interface UserAttributes {
   username?: string;
   password?: string;
   createAt?: Date;
+  active?: boolean;
 }
 
 export type UserPk = 'id';
@@ -22,7 +23,8 @@ export type UserOptionalAttributes =
   | 'phone'
   | 'username'
   | 'password'
-  | 'createAt';
+  | 'createAt'
+  | 'active';
 export type UserCreationAttributes = Optional<
   UserAttributes,
   UserOptionalAttributes
@@ -39,6 +41,7 @@ export class User
   username?: string;
   password?: string;
   createAt?: Date;
+  active?: boolean;
 
   // User hasMany Group via owner
   groups!: Group[];
@@ -151,6 +154,10 @@ export class User
           type: DataTypes.DATE,
           allowNull: true,
           field: 'create_at',
+        },
+        active: {
+          type: DataTypes.BOOLEAN,
+          allowNull: true,
         },
       },
       {
