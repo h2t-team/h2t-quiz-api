@@ -8,8 +8,12 @@ const RoomSocketHandler = (io: Server, socket: Socket) => {
     io.to(roomId).emit('join room', `a member join room ${roomId}`);
   });
 
-  socket.on('update info', async ({ roomId, optionId }) => {
+  socket.on('update info', ({ roomId, optionId }) => {
     io.to(roomId).emit('update info', { optionId });
+  });
+
+  socket.on('change slide', ({ roomId, slideId }) => {
+    io.to(roomId).emit('change slide', { slideId });
   });
 };
 
