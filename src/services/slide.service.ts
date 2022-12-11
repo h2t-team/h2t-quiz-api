@@ -56,8 +56,8 @@ const addOptionToSlide = (slideId: number, option: string) => {
 
 const updateOptionInfo = (
   optionId: number,
-  option: number | undefined,
-  amount: string | undefined,
+  option: string | undefined,
+  amount: number | undefined,
 ) => {
   const updateOption: UpdateOption = {};
 
