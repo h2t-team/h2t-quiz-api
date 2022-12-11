@@ -1,7 +1,6 @@
 import { Socket, Server } from 'socket.io';
 
 const RoomSocketHandler = (io: Server, socket: Socket) => {
-  // eslint-disable-next-line no-console
   socket.on('join room', (roomId) => {
     // eslint-disable-next-line no-console
     console.log('join room', roomId);
