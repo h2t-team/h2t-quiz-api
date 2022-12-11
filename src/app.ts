@@ -1,11 +1,26 @@
 import express, { Express } from 'express';
 import createError from 'http-errors';
 import cors from 'cors';
+import http from 'http';
+import { Server } from 'socket.io';
 import config from './config';
 import { sequelize } from './models';
 import MainRouter from './routes';
+import SocketConnectionHandler from './socket';
 
 const app: Express = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: [
+      'http://127.0.0.1:5500',
+      'http://localhost:3000',
+      'https://h2t-quiz-game-stag.vercel.app',
+      'https://h2t-quiz-game.vercel.app',
+    ],
+    credentials: true,
+  },
+});
 const port = config.server.port;
 
 async function runApp() {
@@ -18,7 +33,9 @@ async function runApp() {
     app.use(express.urlencoded({ extended: true }));
     app.use('/', MainRouter);
 
-    app.listen(port, () => {
+    io.on('connection', SocketConnectionHandler(io));
+
+    server.listen(port, () => {
       // eslint-disable-next-line no-console
       console.log('⚡️[server]: Server is running');
     });
