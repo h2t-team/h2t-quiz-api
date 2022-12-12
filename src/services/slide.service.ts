@@ -11,7 +11,7 @@ const getSlideInPresentation = (presentId: string) => {
     where: {
       presentId,
     },
-    attributes: ['title', 'index'],
+    attributes: ['id', 'title', 'index'],
     include: [
       {
         model: models.PollSlide,

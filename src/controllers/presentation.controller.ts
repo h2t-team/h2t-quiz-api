@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import {
+  addOptionToSlide,
   createSlide,
   deleteSlide,
   getSlideInPresentation,
@@ -73,7 +74,6 @@ const getPresentationDetail = async (req: Request, res: Response) => {
         message: 'Presentation does not exist',
       });
     }
-    //TODO: get option list of slide
     const slides = await getSlideInPresentation(presentId);
     return res.status(200).json({
       succcess: true,
@@ -121,7 +121,11 @@ const addNewSlide = async (req: Request, res: Response) => {
   try {
     const slides = await getSlideInPresentation(presentId);
     const index = slides.length;
-    await createSlide(presentId, title, index);
+    const slide = await createSlide(presentId, title, index);
+    await Promise.all([
+      addOptionToSlide(slide.id, 'Option 1'),
+      addOptionToSlide(slide.id, 'Option 2'),
+    ]);
     return res.status(200).json({
       succcess: true,
       message: 'Slide create successfully.',
