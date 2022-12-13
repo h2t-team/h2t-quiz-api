@@ -28,15 +28,15 @@ const addNewOption = async (req: Request, res: Response) => {
 };
 
 const updateOption = async (req: Request, res: Response) => {
-  const { slideId, option, amount } = req.body;
-  if (!slideId) {
+  const { optionId, option, amount } = req.body;
+  if (!optionId) {
     return res.status(400).json({
       success: false,
       message: 'Missing information!',
     });
   }
   try {
-    await updateOptionInfo(slideId, option, amount);
+    await updateOptionInfo(optionId, option, amount);
     return res.status(200).json({
       succcess: true,
       message: 'Option update successfully.',
