@@ -4,6 +4,7 @@ import {
   createSlide,
   deleteSlide,
   getSlideInPresentation,
+  getOneSlideInPresentation,
 } from '../services/slide.service';
 import {
   createPresentation,
@@ -79,6 +80,45 @@ const getPresentationDetail = async (req: Request, res: Response) => {
       succcess: true,
       presentation,
       slides,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const getDetailSlideInPresentation = async (req: Request, res: Response) => {
+  const { presentId, slideId } = req.params;
+  if (!presentId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+
+  try {
+    const presentation = await getPresentationById(presentId);
+    if (!presentation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Presentation does not exist',
+      });
+    }
+
+    if (!slideId) {
+      const firstSlide = await getSlideInPresentation(presentId)[0];
+      return res.status(200).json({
+        succcess: true,
+        firstSlide,
+      });
+    }
+
+    const slide = await getOneSlideInPresentation(presentId, Number(slideId));
+    return res.status(200).json({
+      succcess: true,
+      slide,
     });
   } catch (error) {
     return res.status(500).json({
@@ -167,4 +207,5 @@ export {
   updatePresentationInfo,
   addNewSlide,
   removeSlide,
+  getDetailSlideInPresentation,
 };

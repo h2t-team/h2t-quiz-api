@@ -23,6 +23,24 @@ const getSlideInPresentation = (presentId: string) => {
   });
 };
 
+const getOneSlideInPresentation = (presentId: string, slideId: number) => {
+  return models.Slide.findOne({
+    where: {
+      presentId,
+      id: slideId,
+    },
+    attributes: ['id', 'title', 'index'],
+    include: [
+      {
+        model: models.PollSlide,
+        as: 'pollSlides',
+        required: true,
+        attributes: ['id', 'option', 'amount'],
+      },
+    ],
+  });
+};
+
 const getOptionAmountById = (optionId: number) => {
   return models.PollSlide.findByPk(optionId, {
     raw: true,
@@ -91,4 +109,5 @@ export {
   addOptionToSlide,
   updateOptionInfo,
   deleteOptionFromSlide,
+  getOneSlideInPresentation,
 };
