@@ -64,8 +64,14 @@ const login = async (req: Request, res: Response) => {
   }
   try {
     const user = await findUser({ username });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Username is incorrect.',
+      });
+    }
     const isPwValid = bcrypt.compareSync(password, user?.password);
-    if (!user || !isPwValid) {
+    if (!isPwValid) {
       return res.status(404).json({
         success: false,
         message: 'Username or password is incorrect.',
