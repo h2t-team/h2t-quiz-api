@@ -3,6 +3,7 @@ import {
   addNewSlide,
   createNewPresentation,
   getAllPresentation,
+  getDetailSlideInPresentation,
   getPresentationDetail,
   removeSlide,
   updatePresentationInfo,
@@ -16,6 +17,6 @@ router.patch('/', updatePresentationInfo);
 router.post('/slide', addNewSlide);
 router.delete('/slide', removeSlide);
 router.get('/:presentId', getPresentationDetail);
-router.get('/:presentId/:slideId', getPresentationDetail);
+router.get('/:presentId/:slideId', getDetailSlideInPresentation);
 
 export default router;
