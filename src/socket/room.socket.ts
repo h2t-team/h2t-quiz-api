@@ -14,6 +14,10 @@ const RoomSocketHandler = (io: Server, socket: Socket) => {
     io.to(roomId).emit('change slide', { slideId });
   });
 
+  socket.on('end slide', ({ roomId }) => {
+    io.to(roomId).emit('end slide');
+  });
+
   socket.on('get data', ({ roomId }) => {
     io.to(roomId).emit('get data');
   });

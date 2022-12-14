@@ -18,8 +18,10 @@ const getSlideInPresentation = (presentId: string) => {
         as: 'pollSlides',
         required: true,
         attributes: ['id', 'option', 'amount'],
+        order: [['id', 'ASC']],
       },
     ],
+    order: [['index', 'ASC']],
   });
 };
 
