@@ -3,6 +3,7 @@ import {
   addOptionToSlide,
   deleteOptionFromSlide,
   updateOptionInfo,
+  updateSlideInfo,
 } from '../services/slide.service';
 
 const addNewOption = async (req: Request, res: Response) => {
@@ -27,6 +28,28 @@ const addNewOption = async (req: Request, res: Response) => {
   }
 };
 
+const updateSlide = async (req: Request, res: Response) => {
+  const { slideId } = req.params;
+  const { title } = req.body;
+  if (!title) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+  try {
+    await updateSlideInfo(Number.parseInt(slideId), title);
+    return res.status(200).json({
+      succcess: true,
+      message: 'Slide update successfully.',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
 const updateOption = async (req: Request, res: Response) => {
   const { optionId, option, amount } = req.body;
   if (!optionId) {
@@ -71,4 +94,4 @@ const removeOption = async (req: Request, res: Response) => {
   }
 };
 
-export { addNewOption, updateOption, removeOption };
+export { addNewOption, updateSlide, updateOption, removeOption };

@@ -56,6 +56,19 @@ const createSlide = (presentId: string, title: string, index = 0) => {
   });
 };
 
+const updateSlideInfo = (slideId: number, title: string) => {
+  return models.Slide.update(
+    {
+      title,
+    },
+    {
+      where: {
+        id: slideId,
+      },
+    },
+  );
+};
+
 const deleteSlide = (presentId: string, index: number) => {
   return models.Slide.destroy({
     where: {
@@ -105,6 +118,7 @@ export {
   getSlideInPresentation,
   getOptionAmountById,
   createSlide,
+  updateSlideInfo,
   deleteSlide,
   addOptionToSlide,
   updateOptionInfo,
