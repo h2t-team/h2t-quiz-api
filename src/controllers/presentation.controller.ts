@@ -136,10 +136,11 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
       });
     }
 
-    if (!slideId) {
+    if (slideId === 'undefined') {
       const firstSlide = await getSlideInPresentation(presentId)[0];
       return res.status(200).json({
         succcess: true,
+        presentation,
         firstSlide,
       });
     }
@@ -147,6 +148,7 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
     const slide = await getOneSlideInPresentation(presentId, Number(slideId));
     return res.status(200).json({
       succcess: true,
+      presentation,
       slide,
     });
   } catch (error) {
