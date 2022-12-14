@@ -7,11 +7,12 @@ export interface PresentationAttributes {
   id: string;
   name?: string;
   userId?: string;
+  inviteCode?: string;
 }
 
 export type PresentationPk = 'id';
 export type PresentationId = Presentation[PresentationPk];
-export type PresentationOptionalAttributes = 'name' | 'userId';
+export type PresentationOptionalAttributes = 'name' | 'userId' | 'inviteCode';
 export type PresentationCreationAttributes = Optional<
   PresentationAttributes,
   PresentationOptionalAttributes
@@ -24,6 +25,7 @@ export class Presentation
   id!: string;
   name?: string;
   userId?: string;
+  inviteCode?: string;
 
   // Presentation hasMany Slide via presentId
   slides!: Slide[];
@@ -62,6 +64,10 @@ export class Presentation
             model: 'user',
             key: 'id',
           },
+        },
+        inviteCode: {
+          type: DataTypes.STRING,
+          allowNull: true,
         },
       },
       {

@@ -44,6 +44,7 @@
     "nodemailer-express-handlebars": "^5.0.0",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
+    "referral-codes": "^2.0.3",
     "sequelize": "^6.25.6",
     "sequelize-auto": "^0.8.8",
     "socket.io": "^4.5.4",

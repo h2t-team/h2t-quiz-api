@@ -1,10 +1,10 @@
 import { models } from '../models';
 import { v4 as uuidv4 } from 'uuid';
-
+import { generate } from 'referral-codes';
 const getPresentationById = (id: string) => {
   return models.Presentation.findByPk(id, {
     raw: true,
-    attributes: ['id', 'name'],
+    attributes: ['id', 'name', 'inviteCode'],
   });
 };
 
@@ -17,11 +17,27 @@ const getPresentationByUser = (userId: string) => {
   });
 };
 
+const getPresentationByCode = (inviteCode: string) => {
+  return models.Presentation.findOne({
+    raw: true,
+    where: {
+      inviteCode,
+    },
+  });
+};
+
 const createPresentation = (name: string, userId: string) => {
+  const inviteCode = generate({
+    length: 6,
+    count: 1,
+    charset: '0123456789',
+  })[0];
+
   return models.Presentation.create({
     id: uuidv4(),
     name,
     userId,
+    inviteCode,
   });
 };
 
@@ -41,6 +57,7 @@ const updatePresentation = (id: string, name: string) => {
 export {
   getPresentationById,
   getPresentationByUser,
+  getPresentationByCode,
   createPresentation,
   updatePresentation,
 };

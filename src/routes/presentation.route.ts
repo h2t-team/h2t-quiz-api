@@ -5,6 +5,7 @@ import {
   getAllPresentation,
   getDetailSlideInPresentation,
   getPresentationDetail,
+  getPresentationWithCode,
   removeSlide,
   updatePresentationInfo,
 } from '../controllers/presentation.controller';
@@ -16,6 +17,7 @@ router.get('/', getAllPresentation);
 router.patch('/', updatePresentationInfo);
 router.post('/slide', addNewSlide);
 router.delete('/slide', removeSlide);
+router.get('/code/:code', getPresentationWithCode);
 router.get('/:presentId', getPresentationDetail);
 router.get('/:presentId/:slideId', getDetailSlideInPresentation);
 

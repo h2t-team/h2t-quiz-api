@@ -8,6 +8,7 @@ import {
 } from '../services/slide.service';
 import {
   createPresentation,
+  getPresentationByCode,
   getPresentationById,
   getPresentationByUser,
   updatePresentation,
@@ -51,6 +52,34 @@ const getAllPresentation = async (req: Request, res: Response) => {
         message: 'Not Found',
       });
     }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const getPresentationWithCode = async (req: Request, res: Response) => {
+  const { code } = req.params;
+  if (!code) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+  try {
+    const presentation = await getPresentationByCode(code);
+    if (!presentation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Presentation does not exist',
+      });
+    }
+    return res.status(200).json({
+      succcess: true,
+      presentation,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -204,6 +233,7 @@ export {
   createNewPresentation,
   getAllPresentation,
   getPresentationDetail,
+  getPresentationWithCode,
   updatePresentationInfo,
   addNewSlide,
   removeSlide,
