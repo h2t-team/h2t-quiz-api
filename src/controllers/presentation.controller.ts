@@ -5,6 +5,7 @@ import {
   deleteSlide,
   getSlideInPresentation,
   getOneSlideInPresentation,
+  getSlidePreviewListById,
 } from '../services/slide.service';
 import {
   createPresentation,
@@ -119,7 +120,7 @@ const getPresentationDetail = async (req: Request, res: Response) => {
 };
 
 const getDetailSlideInPresentation = async (req: Request, res: Response) => {
-  const { presentId, slideId } = req.params;
+  const { presentId, index } = req.params;
   if (!presentId) {
     return res.status(400).json({
       success: false,
@@ -136,7 +137,7 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
       });
     }
 
-    if (slideId === 'undefined') {
+    if (index === 'undefined') {
       const firstSlide = await getSlideInPresentation(presentId)[0];
       return res.status(200).json({
         succcess: true,
@@ -145,7 +146,7 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
       });
     }
 
-    const slide = await getOneSlideInPresentation(presentId, Number(slideId));
+    const slide = await getOneSlideInPresentation(presentId, Number(index));
     return res.status(200).json({
       succcess: true,
       presentation,
@@ -231,6 +232,31 @@ const removeSlide = async (req: Request, res: Response) => {
   }
 };
 
+const getSlidePreviews = async (req: Request, res: Response) => {
+  const { presentId } = req.params;
+
+  if (!presentId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Presentation not found!',
+    });
+  }
+
+  try {
+    const slidePreviewList = await getSlidePreviewListById(presentId);
+
+    return res.status(200).json({
+      succcess: true,
+      slidePreviewList,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 export {
   createNewPresentation,
   getAllPresentation,
@@ -240,4 +266,5 @@ export {
   addNewSlide,
   removeSlide,
   getDetailSlideInPresentation,
+  getSlidePreviews,
 };

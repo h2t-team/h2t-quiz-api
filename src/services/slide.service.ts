@@ -25,11 +25,11 @@ const getSlideInPresentation = (presentId: string) => {
   });
 };
 
-const getOneSlideInPresentation = (presentId: string, slideId: number) => {
+const getOneSlideInPresentation = (presentId: string, index: number) => {
   return models.Slide.findOne({
     where: {
       presentId,
-      id: slideId,
+      index,
     },
     attributes: ['id', 'title', 'index'],
     include: [
@@ -116,6 +116,15 @@ const deleteOptionFromSlide = (optionId: number) => {
   });
 };
 
+const getSlidePreviewListById = (presentationId: string) => {
+  return models.Slide.findAll({
+    where: {
+      presentId: presentationId,
+    },
+    order: [['index', 'ASC']],
+  });
+};
+
 export {
   getSlideInPresentation,
   getOptionAmountById,
@@ -126,4 +135,5 @@ export {
   updateOptionInfo,
   deleteOptionFromSlide,
   getOneSlideInPresentation,
+  getSlidePreviewListById,
 };
