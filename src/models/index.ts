@@ -10,5 +10,6 @@ export const sequelize = new Sequelize(config.server.dtbUri, {
     },
   },
 });
+// export const sequelize = new Sequelize(config.server.dtbUri);
 
 export const models = initModels(sequelize);

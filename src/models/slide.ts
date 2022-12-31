@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { ParaSlide, ParaSlideId } from './paraSlide';
 import type { PollSlide, PollSlideId } from './pollSlide';
 import type { Presentation, PresentationId } from './presentation';
 
@@ -8,11 +9,17 @@ export interface SlideAttributes {
   presentId?: string;
   title?: string;
   index?: number;
+  type?: 'poll' | 'heading' | 'paragraph';
 }
 
 export type SlidePk = 'id';
 export type SlideId = Slide[SlidePk];
-export type SlideOptionalAttributes = 'id' | 'presentId' | 'title' | 'index';
+export type SlideOptionalAttributes =
+  | 'id'
+  | 'presentId'
+  | 'title'
+  | 'index'
+  | 'type';
 export type SlideCreationAttributes = Optional<
   SlideAttributes,
   SlideOptionalAttributes
@@ -26,6 +33,7 @@ export class Slide
   presentId?: string;
   title?: string;
   index?: number;
+  type?: 'poll' | 'heading' | 'paragraph';
 
   // Slide belongsTo Presentation via presentId
   present!: Presentation;
@@ -35,6 +43,24 @@ export class Slide
     PresentationId
   >;
   createPresent!: Sequelize.BelongsToCreateAssociationMixin<Presentation>;
+  // Slide hasMany ParaSlide via slideId
+  paraSlides!: ParaSlide[];
+  getParaSlides!: Sequelize.HasManyGetAssociationsMixin<ParaSlide>;
+  setParaSlides!: Sequelize.HasManySetAssociationsMixin<ParaSlide, ParaSlideId>;
+  addParaSlide!: Sequelize.HasManyAddAssociationMixin<ParaSlide, ParaSlideId>;
+  addParaSlides!: Sequelize.HasManyAddAssociationsMixin<ParaSlide, ParaSlideId>;
+  createParaSlide!: Sequelize.HasManyCreateAssociationMixin<ParaSlide>;
+  removeParaSlide!: Sequelize.HasManyRemoveAssociationMixin<
+    ParaSlide,
+    ParaSlideId
+  >;
+  removeParaSlides!: Sequelize.HasManyRemoveAssociationsMixin<
+    ParaSlide,
+    ParaSlideId
+  >;
+  hasParaSlide!: Sequelize.HasManyHasAssociationMixin<ParaSlide, ParaSlideId>;
+  hasParaSlides!: Sequelize.HasManyHasAssociationsMixin<ParaSlide, ParaSlideId>;
+  countParaSlides!: Sequelize.HasManyCountAssociationsMixin;
   // Slide hasMany PollSlide via slideId
   pollSlides!: PollSlide[];
   getPollSlides!: Sequelize.HasManyGetAssociationsMixin<PollSlide>;
@@ -77,6 +103,10 @@ export class Slide
         },
         index: {
           type: DataTypes.INTEGER,
+          allowNull: true,
+        },
+        type: {
+          type: DataTypes.ENUM('poll', 'heading', 'paragraph'),
           allowNull: true,
         },
       },

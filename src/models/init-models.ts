@@ -1,6 +1,11 @@
 import type { Sequelize } from 'sequelize';
 import { Group as _Group } from './group';
 import type { GroupAttributes, GroupCreationAttributes } from './group';
+import { ParaSlide as _ParaSlide } from './paraSlide';
+import type {
+  ParaSlideAttributes,
+  ParaSlideCreationAttributes,
+} from './paraSlide';
 import { PollSlide as _PollSlide } from './pollSlide';
 import type {
   PollSlideAttributes,
@@ -23,6 +28,7 @@ import type {
 
 export {
   _Group as Group,
+  _ParaSlide as ParaSlide,
   _PollSlide as PollSlide,
   _Presentation as Presentation,
   _Slide as Slide,
@@ -33,6 +39,8 @@ export {
 export type {
   GroupAttributes,
   GroupCreationAttributes,
+  ParaSlideAttributes,
+  ParaSlideCreationAttributes,
   PollSlideAttributes,
   PollSlideCreationAttributes,
   PresentationAttributes,
@@ -47,6 +55,7 @@ export type {
 
 export function initModels(sequelize: Sequelize) {
   const Group = _Group.initModel(sequelize);
+  const ParaSlide = _ParaSlide.initModel(sequelize);
   const PollSlide = _PollSlide.initModel(sequelize);
   const Presentation = _Presentation.initModel(sequelize);
   const Slide = _Slide.initModel(sequelize);
@@ -57,6 +66,8 @@ export function initModels(sequelize: Sequelize) {
   Group.hasMany(UserInGroup, { as: 'userInGroups', foreignKey: 'groupId' });
   Slide.belongsTo(Presentation, { as: 'present', foreignKey: 'presentId' });
   Presentation.hasMany(Slide, { as: 'slides', foreignKey: 'presentId' });
+  ParaSlide.belongsTo(Slide, { as: 'slide', foreignKey: 'slideId' });
+  Slide.hasMany(ParaSlide, { as: 'paraSlides', foreignKey: 'slideId' });
   PollSlide.belongsTo(Slide, { as: 'slide', foreignKey: 'slideId' });
   Slide.hasMany(PollSlide, { as: 'pollSlides', foreignKey: 'slideId' });
   Group.belongsTo(User, { as: 'ownerUser', foreignKey: 'owner' });
@@ -68,6 +79,7 @@ export function initModels(sequelize: Sequelize) {
 
   return {
     Group: Group,
+    ParaSlide: ParaSlide,
     PollSlide: PollSlide,
     Presentation: Presentation,
     Slide: Slide,
