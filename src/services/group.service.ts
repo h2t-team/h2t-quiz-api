@@ -45,7 +45,7 @@ const findGroupById = (groupId = '') => {
       {
         model: models.UserInGroup,
         as: 'userInGroups',
-        attributes: ['userId'],
+        attributes: ['userId', 'role'],
         include: [
           {
             model: models.User,
