@@ -51,13 +51,13 @@ const findGroupById = (groupId = '') => {
             model: models.User,
             as: 'user',
             attributes: ['fullname', 'username'],
-            where: {
-              role: {
-                [Op.ne]: 'kick out',
-              },
-            },
           },
         ],
+        where: {
+          role: {
+            [Op.ne]: 'kick out',
+          },
+        },
       },
     ],
   });
