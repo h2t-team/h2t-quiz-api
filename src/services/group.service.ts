@@ -26,6 +26,9 @@ const findGroupsByUser = (userId = '') => {
     ],
     where: {
       userId,
+      role: {
+        [Op.ne]: 'kick out',
+      },
     },
     attributes: ['role'],
   });
@@ -48,6 +51,11 @@ const findGroupById = (groupId = '') => {
             model: models.User,
             as: 'user',
             attributes: ['fullname', 'username'],
+            where: {
+              role: {
+                [Op.ne]: 'kick out',
+              },
+            },
           },
         ],
       },
