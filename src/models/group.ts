@@ -7,11 +7,12 @@ export interface GroupAttributes {
   id: string;
   name?: string;
   owner?: string;
+  isDelete?: boolean;
 }
 
 export type GroupPk = 'id';
 export type GroupId = Group[GroupPk];
-export type GroupOptionalAttributes = 'name' | 'owner';
+export type GroupOptionalAttributes = 'name' | 'owner' | 'isDelete';
 export type GroupCreationAttributes = Optional<
   GroupAttributes,
   GroupOptionalAttributes
@@ -24,6 +25,7 @@ export class Group
   id!: string;
   name?: string;
   owner?: string;
+  isDelete?: boolean;
 
   // Group hasMany UserInGroup via groupId
   userInGroups!: UserInGroup[];
@@ -83,6 +85,10 @@ export class Group
             model: 'user',
             key: 'id',
           },
+        },
+        isDelete: {
+          type: DataTypes.BOOLEAN,
+          allowNull: true,
         },
       },
       {

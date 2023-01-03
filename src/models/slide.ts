@@ -10,6 +10,7 @@ export interface SlideAttributes {
   title?: string;
   index?: number;
   type?: 'poll' | 'heading' | 'paragraph';
+  isDelete?: boolean;
 }
 
 export type SlidePk = 'id';
@@ -19,7 +20,8 @@ export type SlideOptionalAttributes =
   | 'presentId'
   | 'title'
   | 'index'
-  | 'type';
+  | 'type'
+  | 'isDelete';
 export type SlideCreationAttributes = Optional<
   SlideAttributes,
   SlideOptionalAttributes
@@ -34,6 +36,7 @@ export class Slide
   title?: string;
   index?: number;
   type?: 'poll' | 'heading' | 'paragraph';
+  isDelete?: boolean;
 
   // Slide belongsTo Presentation via presentId
   present!: Presentation;
@@ -107,6 +110,10 @@ export class Slide
         },
         type: {
           type: DataTypes.ENUM('poll', 'heading', 'paragraph'),
+          allowNull: true,
+        },
+        isDelete: {
+          type: DataTypes.BOOLEAN,
           allowNull: true,
         },
       },
