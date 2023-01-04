@@ -5,6 +5,9 @@ import {
   loginWithGoogle,
   activateAccount,
   resendEmail,
+  forgotPassword,
+  resetPassword,
+  getResetPasswordAccount
 } from '../controllers/auth.controller';
 
 const router = Router();
@@ -17,4 +20,7 @@ router.get('/', (req, res) => {
 });
 router.get('/activate-account', activateAccount);
 router.post('/resend-email', resendEmail);
+router.post('/forgot-password', forgotPassword);
+router.get('/reset-password', getResetPasswordAccount);
+router.post('/reset-password', resetPassword);
 export default router;

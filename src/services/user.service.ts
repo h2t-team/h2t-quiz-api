@@ -97,6 +97,50 @@ const sendActivationEmail = async (email, token) => {
   }
 };
 
+const sendResetPasswordEmail = async (email, token) => {
+  const hbsConfig = {
+    viewEngine: {
+      extName: '.hbs',
+      partialsDir: path.join(__dirname, '../templates/'),
+      layoutsDir: path.join(__dirname, '../templates/'),
+      defaultLayout: '',
+    },
+    viewPath: path.join(__dirname, '../templates/'),
+    extName: '.hbs',
+  };
+
+  const transporter = await nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  transporter.use('compile', hbs(hbsConfig));
+
+  const link = `${process.env.CLIENT_URL}/auth/reset-password?token=${token}`;
+  const title = 'Welcome Back!';
+  const description =
+    'There was recently a request to change the password for your account. If you requested this change, press the button below.';
+  const button = 'Reset Password';
+  const data = { email, link, title, description, button };
+
+  const mailOptions = {
+    from: process.env.EMAIL_USERNAME,
+    to: email,
+    subject: 'Reset Password Email - H2T',
+    template: 'emailTemplate',
+    context: data,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    throw Error('Send reset password mail fail');
+  }
+};
+
 const updateAccountActivation = async (id: string, active: boolean) => {
   return await models.User.update(
     {
@@ -138,12 +182,32 @@ const updateUser = (
     where: { id },
   });
 };
+
+const updateUserPassword = async (
+  id: string,
+  password: string,
+) => {
+  const hashPassword = bcrypt.hashSync(password, 10);
+  return await models.User.update(
+    {
+      password: hashPassword,
+    },
+    {
+      where: {
+        id: id,
+      },
+    },
+  );
+};
+
 export {
   findUser,
   findUserById,
   createUser,
   checkEmail,
   sendActivationEmail,
+  sendResetPasswordEmail,
   updateAccountActivation,
   updateUser,
+  updateUserPassword
 };
