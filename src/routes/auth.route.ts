@@ -7,7 +7,7 @@ import {
   resendEmail,
   forgotPassword,
   resetPassword,
-  getResetPasswordAccount
+  getResetPasswordAccount,
 } from '../controllers/auth.controller';
 
 const router = Router();

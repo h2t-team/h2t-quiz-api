@@ -183,10 +183,7 @@ const updateUser = (
   });
 };
 
-const updateUserPassword = async (
-  id: string,
-  password: string,
-) => {
+const updateUserPassword = async (id: string, password: string) => {
   const hashPassword = bcrypt.hashSync(password, 10);
   return await models.User.update(
     {
@@ -209,5 +206,5 @@ export {
   sendResetPasswordEmail,
   updateAccountActivation,
   updateUser,
-  updateUserPassword
+  updateUserPassword,
 };
