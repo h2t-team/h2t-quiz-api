@@ -8,11 +8,16 @@ export interface PresentationAttributes {
   name?: string;
   userId?: string;
   inviteCode?: string;
+  isDelete?: boolean;
 }
 
 export type PresentationPk = 'id';
 export type PresentationId = Presentation[PresentationPk];
-export type PresentationOptionalAttributes = 'name' | 'userId' | 'inviteCode';
+export type PresentationOptionalAttributes =
+  | 'name'
+  | 'userId'
+  | 'inviteCode'
+  | 'isDelete';
 export type PresentationCreationAttributes = Optional<
   PresentationAttributes,
   PresentationOptionalAttributes
@@ -26,6 +31,7 @@ export class Presentation
   name?: string;
   userId?: string;
   inviteCode?: string;
+  isDelete?: boolean;
 
   // Presentation hasMany Slide via presentId
   slides!: Slide[];
@@ -67,6 +73,10 @@ export class Presentation
         },
         inviteCode: {
           type: DataTypes.STRING,
+          allowNull: true,
+        },
+        isDelete: {
+          type: DataTypes.BOOLEAN,
           allowNull: true,
         },
       },
