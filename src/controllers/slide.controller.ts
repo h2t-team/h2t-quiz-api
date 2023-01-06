@@ -4,6 +4,8 @@ import {
   deleteOptionFromSlide,
   updateOptionInfo,
   updateSlideInfo,
+  updateSlidePara,
+  updateSlideType,
 } from '../services/slide.service';
 
 const addNewOption = async (req: Request, res: Response) => {
@@ -50,6 +52,61 @@ const updateSlide = async (req: Request, res: Response) => {
     });
   }
 };
+
+const changeSlideType = async (req: Request, res: Response) => {
+  const { type } = req.body;
+  const { slideId } = req.params;
+  if (!slideId || !type) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+
+  if (type !== 'poll' && type !== 'heading' && type !== 'paragraph') {
+    return res.status(400).json({
+      success: false,
+      message: 'Slide type is invalid!',
+    });
+  }
+
+  try {
+    await updateSlideType(Number.parseInt(slideId), type);
+    return res.status(200).json({
+      succcess: true,
+      message: 'Change type successfully.',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const updateSlideParagraph = async (req: Request, res: Response) => {
+  const { paragraph } = req.body;
+  const { slideId } = req.params;
+  if (!paragraph || !slideId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+  try {
+    await updateSlidePara(Number.parseInt(slideId), paragraph);
+    return res.status(200).json({
+      succcess: true,
+      message: 'Paragraph update successfully.',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 const updateOption = async (req: Request, res: Response) => {
   const { optionId, option, amount } = req.body;
   if (!optionId) {
@@ -94,4 +151,11 @@ const removeOption = async (req: Request, res: Response) => {
   }
 };
 
-export { addNewOption, updateSlide, updateOption, removeOption };
+export {
+  addNewOption,
+  updateSlide,
+  changeSlideType,
+  updateOption,
+  updateSlideParagraph,
+  removeOption,
+};
