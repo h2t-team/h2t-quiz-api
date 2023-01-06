@@ -25,7 +25,12 @@ const createNewPresentation = async (req: Request, res: Response) => {
     });
   }
   try {
-    await createPresentation(name, userId);
+    const presentation = await createPresentation(name, userId);
+    const slide = await createSlide(presentation.id, '', 0);
+    await Promise.all([
+      addOptionToSlide(slide.id, 'Option 1'),
+      addOptionToSlide(slide.id, 'Option 2'),
+    ]);
     return res.status(200).json({
       succcess: true,
       message: 'Presentation create successfully.',
@@ -147,6 +152,12 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
     }
 
     const slide = await getOneSlideInPresentation(presentId, Number(index));
+    if (!slide) {
+      return res.status(404).json({
+        succcess: false,
+        message: 'Slide not found',
+      });
+    }
     return res.status(200).json({
       succcess: true,
       presentation,

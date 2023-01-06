@@ -71,10 +71,19 @@ const updateSlideInfo = (slideId: number, title: string) => {
   );
 };
 
-const deleteSlide = (presentId: string, index: number) => {
-  return models.Slide.destroy({
+const deleteSlide = async (presentId: string, index: number) => {
+  await models.Slide.destroy({
     where: {
       [Op.and]: [{ presentId }, { index }],
+    },
+  });
+
+  return models.Slide.decrement('index', {
+    by: 1,
+    where: {
+      index: {
+        [Op.gte]: index,
+      },
     },
   });
 };
