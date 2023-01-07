@@ -31,7 +31,7 @@ const getOneSlideInPresentation = (presentId: string, index: number) => {
       presentId,
       index,
     },
-    attributes: ['id', 'title', 'index'],
+    attributes: ['id', 'title', 'index', 'paragraph', 'type'],
     include: [
       {
         model: models.PollSlide,
