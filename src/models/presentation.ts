@@ -1,5 +1,9 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type {
+  QuestionInPresentation,
+  QuestionInPresentationId,
+} from './questionInPresentation';
 import type { Slide, SlideId } from './slide';
 import type { User, UserId } from './user';
 
@@ -33,6 +37,39 @@ export class Presentation
   inviteCode?: string;
   isDelete?: boolean;
 
+  // Presentation hasMany QuestionInPresentation via presentationId
+  questionInPresentations!: QuestionInPresentation[];
+  getQuestionInPresentations!: Sequelize.HasManyGetAssociationsMixin<QuestionInPresentation>;
+  setQuestionInPresentations!: Sequelize.HasManySetAssociationsMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  addQuestionInPresentation!: Sequelize.HasManyAddAssociationMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  addQuestionInPresentations!: Sequelize.HasManyAddAssociationsMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  createQuestionInPresentation!: Sequelize.HasManyCreateAssociationMixin<QuestionInPresentation>;
+  removeQuestionInPresentation!: Sequelize.HasManyRemoveAssociationMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  removeQuestionInPresentations!: Sequelize.HasManyRemoveAssociationsMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  hasQuestionInPresentation!: Sequelize.HasManyHasAssociationMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  hasQuestionInPresentations!: Sequelize.HasManyHasAssociationsMixin<
+    QuestionInPresentation,
+    QuestionInPresentationId
+  >;
+  countQuestionInPresentations!: Sequelize.HasManyCountAssociationsMixin;
   // Presentation hasMany Slide via presentId
   slides!: Slide[];
   getSlides!: Sequelize.HasManyGetAssociationsMixin<Slide>;

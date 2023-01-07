@@ -89,6 +89,7 @@ export class Group
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: true,
+          defaultValue: false,
         },
       },
       {

@@ -56,10 +56,20 @@ const updatePresentation = (id: string, name: string) => {
   );
 };
 
+const getQuestionListByPresentationId = (id: string) => {
+  return models.QuestionInPresentation.findAll({
+    raw: true,
+    where: {
+      presentationId: id,
+    },
+  });
+};
+
 export {
   getPresentationById,
   getPresentationByUser,
   getPresentationByCode,
   createPresentation,
   updatePresentation,
+  getQuestionListByPresentationId,
 };

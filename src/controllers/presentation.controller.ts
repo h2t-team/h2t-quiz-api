@@ -12,6 +12,7 @@ import {
   getPresentationByCode,
   getPresentationById,
   getPresentationByUser,
+  getQuestionListByPresentationId,
   updatePresentation,
 } from '../services/presentation.service';
 
@@ -268,6 +269,31 @@ const getSlidePreviews = async (req: Request, res: Response) => {
   }
 };
 
+const getQuestionsInPresentation = async (req: Request, res: Response) => {
+  const { presentId } = req.params;
+
+  if (!presentId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Presentation not found!',
+    });
+  }
+
+  try {
+    const questionList = await getQuestionListByPresentationId(presentId);
+
+    return res.status(200).json({
+      succcess: true,
+      questionList,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 export {
   createNewPresentation,
   getAllPresentation,
@@ -278,4 +304,5 @@ export {
   removeSlide,
   getDetailSlideInPresentation,
   getSlidePreviews,
+  getQuestionsInPresentation,
 };

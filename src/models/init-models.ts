@@ -11,6 +11,11 @@ import type {
   PresentationAttributes,
   PresentationCreationAttributes,
 } from './presentation';
+import { QuestionInPresentation as _QuestionInPresentation } from './questionInPresentation';
+import type {
+  QuestionInPresentationAttributes,
+  QuestionInPresentationCreationAttributes,
+} from './questionInPresentation';
 import { Slide as _Slide } from './slide';
 import type { SlideAttributes, SlideCreationAttributes } from './slide';
 import { User as _User } from './user';
@@ -25,6 +30,7 @@ export {
   _Group as Group,
   _PollSlide as PollSlide,
   _Presentation as Presentation,
+  _QuestionInPresentation as QuestionInPresentation,
   _Slide as Slide,
   _User as User,
   _UserInGroup as UserInGroup,
@@ -37,6 +43,8 @@ export type {
   PollSlideCreationAttributes,
   PresentationAttributes,
   PresentationCreationAttributes,
+  QuestionInPresentationAttributes,
+  QuestionInPresentationCreationAttributes,
   SlideAttributes,
   SlideCreationAttributes,
   UserAttributes,
@@ -49,12 +57,21 @@ export function initModels(sequelize: Sequelize) {
   const Group = _Group.initModel(sequelize);
   const PollSlide = _PollSlide.initModel(sequelize);
   const Presentation = _Presentation.initModel(sequelize);
+  const QuestionInPresentation = _QuestionInPresentation.initModel(sequelize);
   const Slide = _Slide.initModel(sequelize);
   const User = _User.initModel(sequelize);
   const UserInGroup = _UserInGroup.initModel(sequelize);
 
   UserInGroup.belongsTo(Group, { as: 'group', foreignKey: 'groupId' });
   Group.hasMany(UserInGroup, { as: 'userInGroups', foreignKey: 'groupId' });
+  QuestionInPresentation.belongsTo(Presentation, {
+    as: 'presentation',
+    foreignKey: 'presentationId',
+  });
+  Presentation.hasMany(QuestionInPresentation, {
+    as: 'questionInPresentations',
+    foreignKey: 'presentationId',
+  });
   Slide.belongsTo(Presentation, { as: 'present', foreignKey: 'presentId' });
   Presentation.hasMany(Slide, { as: 'slides', foreignKey: 'presentId' });
   PollSlide.belongsTo(Slide, { as: 'slide', foreignKey: 'slideId' });
@@ -70,6 +87,7 @@ export function initModels(sequelize: Sequelize) {
     Group: Group,
     PollSlide: PollSlide,
     Presentation: Presentation,
+    QuestionInPresentation: QuestionInPresentation,
     Slide: Slide,
     User: User,
     UserInGroup: UserInGroup,

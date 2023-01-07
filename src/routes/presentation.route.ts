@@ -9,6 +9,7 @@ import {
   removeSlide,
   updatePresentationInfo,
   getSlidePreviews,
+  getQuestionsInPresentation,
 } from '../controllers/presentation.controller';
 
 const router = Router();
@@ -21,6 +22,7 @@ router.delete('/slide', removeSlide);
 router.get('/code/:code', getPresentationWithCode);
 router.get('/:presentId', getPresentationDetail);
 router.get('/:presentId/slidepreviews', getSlidePreviews);
+router.get('/:presentId/questions', getQuestionsInPresentation);
 router.get('/:presentId/:index', getDetailSlideInPresentation);
 
 export default router;
