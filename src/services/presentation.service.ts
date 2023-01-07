@@ -13,6 +13,7 @@ const getPresentationByUser = (userId: string) => {
     raw: true,
     where: {
       userId,
+      isDelete: false,
     },
   });
 };
@@ -38,6 +39,7 @@ const createPresentation = (name: string, userId: string) => {
     name,
     userId,
     inviteCode,
+    isDelete: false,
   });
 };
 
