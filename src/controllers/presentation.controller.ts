@@ -195,7 +195,7 @@ const updatePresentationInfo = async (req: Request, res: Response) => {
 
 const addNewSlide = async (req: Request, res: Response) => {
   const { presentId, title } = req.body;
-  if (!presentId || !title) {
+  if (!presentId) {
     return res.status(400).json({
       success: false,
       message: 'Missing information!',
