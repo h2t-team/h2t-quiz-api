@@ -11,12 +11,12 @@ const getSlideInPresentation = (presentId: string) => {
     where: {
       presentId,
     },
-    attributes: ['id', 'title', 'index'],
+    attributes: ['id', 'title', 'index', 'type', 'paragraph'],
     include: [
       {
         model: models.PollSlide,
         as: 'pollSlides',
-        required: true,
+        required: false,
         attributes: ['id', 'option', 'amount'],
         order: [['id', 'ASC']],
       },
@@ -31,7 +31,7 @@ const getOneSlideInPresentation = (presentId: string, index: number) => {
       presentId,
       index,
     },
-    attributes: ['id', 'title', 'index'],
+    attributes: ['id', 'title', 'index', 'paragraph', 'type'],
     include: [
       {
         model: models.PollSlide,
@@ -50,11 +50,17 @@ const getOptionAmountById = (optionId: number) => {
   });
 };
 
-const createSlide = (presentId: string, title: string, index = 0) => {
+const createSlide = (
+  presentId: string,
+  title: string,
+  index = 0,
+  type: 'poll' | 'heading' | 'paragraph' = 'poll',
+) => {
   return models.Slide.create({
     presentId,
     title,
     index,
+    type,
   });
 };
 
@@ -62,6 +68,35 @@ const updateSlideInfo = (slideId: number, title: string) => {
   return models.Slide.update(
     {
       title,
+    },
+    {
+      where: {
+        id: slideId,
+      },
+    },
+  );
+};
+
+const updateSlideType = (
+  slideId: number,
+  type: 'poll' | 'heading' | 'paragraph',
+) => {
+  return models.Slide.update(
+    {
+      type,
+    },
+    {
+      where: {
+        id: slideId,
+      },
+    },
+  );
+};
+
+const updateSlidePara = (slideId: number, paragraph: string) => {
+  return models.Slide.update(
+    {
+      paragraph,
     },
     {
       where: {
@@ -139,9 +174,11 @@ export {
   getOptionAmountById,
   createSlide,
   updateSlideInfo,
+  updateSlideType,
   deleteSlide,
   addOptionToSlide,
   updateOptionInfo,
+  updateSlidePara,
   deleteOptionFromSlide,
   getOneSlideInPresentation,
   getSlidePreviewListById,
