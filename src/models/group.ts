@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { Presentation, PresentationId } from './presentation';
 import type { User, UserId } from './user';
 import type { UserInGroup, UserInGroupId } from './userInGroup';
 
@@ -27,6 +28,39 @@ export class Group
   owner?: string;
   isDelete?: boolean;
 
+  // Group hasMany Presentation via groupId
+  presentations!: Presentation[];
+  getPresentations!: Sequelize.HasManyGetAssociationsMixin<Presentation>;
+  setPresentations!: Sequelize.HasManySetAssociationsMixin<
+    Presentation,
+    PresentationId
+  >;
+  addPresentation!: Sequelize.HasManyAddAssociationMixin<
+    Presentation,
+    PresentationId
+  >;
+  addPresentations!: Sequelize.HasManyAddAssociationsMixin<
+    Presentation,
+    PresentationId
+  >;
+  createPresentation!: Sequelize.HasManyCreateAssociationMixin<Presentation>;
+  removePresentation!: Sequelize.HasManyRemoveAssociationMixin<
+    Presentation,
+    PresentationId
+  >;
+  removePresentations!: Sequelize.HasManyRemoveAssociationsMixin<
+    Presentation,
+    PresentationId
+  >;
+  hasPresentation!: Sequelize.HasManyHasAssociationMixin<
+    Presentation,
+    PresentationId
+  >;
+  hasPresentations!: Sequelize.HasManyHasAssociationsMixin<
+    Presentation,
+    PresentationId
+  >;
+  countPresentations!: Sequelize.HasManyCountAssociationsMixin;
   // Group hasMany UserInGroup via groupId
   userInGroups!: UserInGroup[];
   getUserInGroups!: Sequelize.HasManyGetAssociationsMixin<UserInGroup>;

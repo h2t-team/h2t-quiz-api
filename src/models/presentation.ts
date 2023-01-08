@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { Group, GroupId } from './group';
 import type {
   QuestionInPresentation,
   QuestionInPresentationId,
@@ -13,6 +14,8 @@ export interface PresentationAttributes {
   userId?: string;
   inviteCode?: string;
   isDelete?: boolean;
+  isPresent?: boolean;
+  groupId?: string;
 }
 
 export type PresentationPk = 'id';
@@ -21,7 +24,9 @@ export type PresentationOptionalAttributes =
   | 'name'
   | 'userId'
   | 'inviteCode'
-  | 'isDelete';
+  | 'isDelete'
+  | 'isPresent'
+  | 'groupId';
 export type PresentationCreationAttributes = Optional<
   PresentationAttributes,
   PresentationOptionalAttributes
@@ -36,7 +41,14 @@ export class Presentation
   userId?: string;
   inviteCode?: string;
   isDelete?: boolean;
+  isPresent?: boolean;
+  groupId?: string;
 
+  // Presentation belongsTo Group via groupId
+  group!: Group;
+  getGroup!: Sequelize.BelongsToGetAssociationMixin<Group>;
+  setGroup!: Sequelize.BelongsToSetAssociationMixin<Group, GroupId>;
+  createGroup!: Sequelize.BelongsToCreateAssociationMixin<Group>;
   // Presentation hasMany QuestionInPresentation via presentationId
   questionInPresentations!: QuestionInPresentation[];
   getQuestionInPresentations!: Sequelize.HasManyGetAssociationsMixin<QuestionInPresentation>;
@@ -115,6 +127,18 @@ export class Presentation
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: true,
+        },
+        isPresent: {
+          type: DataTypes.BOOLEAN,
+          allowNull: true,
+        },
+        groupId: {
+          type: DataTypes.STRING,
+          allowNull: true,
+          references: {
+            model: 'group',
+            key: 'id',
+          },
         },
       },
       {

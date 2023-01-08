@@ -62,6 +62,8 @@ export function initModels(sequelize: Sequelize) {
   const User = _User.initModel(sequelize);
   const UserInGroup = _UserInGroup.initModel(sequelize);
 
+  Presentation.belongsTo(Group, { as: 'group', foreignKey: 'groupId' });
+  Group.hasMany(Presentation, { as: 'presentations', foreignKey: 'groupId' });
   UserInGroup.belongsTo(Group, { as: 'group', foreignKey: 'groupId' });
   Group.hasMany(UserInGroup, { as: 'userInGroups', foreignKey: 'groupId' });
   QuestionInPresentation.belongsTo(Presentation, {
