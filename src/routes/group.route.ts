@@ -6,6 +6,7 @@ import {
   addUsersToExistingGroup,
   setUserRole,
   inviteUserByEmail,
+  checkUserInGroup,
 } from '../controllers/group.controller';
 
 const router = Router();
@@ -15,6 +16,8 @@ router.get('/', getGroupsByUser);
 router.post('/createGroup', createNewGroup);
 
 router.get('/:groupId', getGroupById);
+
+router.get('/:groupId/check-user', checkUserInGroup);
 
 router.post('/:groupId/addUsers', addUsersToExistingGroup);
 

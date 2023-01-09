@@ -241,6 +241,31 @@ const inviteUserByEmail = async (req: Request, res: Response) => {
     });
   }
 };
+
+const checkUserInGroup = async (req: Request, res: Response) => {
+  const { groupId } = req.params;
+  const { id: userId } = req.user;
+  try {
+    const userInGroup = await findUserInGroup(groupId, userId);
+    if (userInGroup) {
+      return res.json({
+        success: true,
+        message: 'User is in group',
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: 'User is not in group',
+      });
+    }
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export {
   getGroupsByUser,
   getGroupById,
@@ -248,4 +273,5 @@ export {
   addUsersToExistingGroup,
   setUserRole,
   inviteUserByEmail,
+  checkUserInGroup,
 };

@@ -14,11 +14,12 @@ import {
   getPresentationByUser,
   getQuestionListByPresentationId,
   updatePresentation,
+  updatePresentationStatus,
 } from '../services/presentation.service';
 
 const createNewPresentation = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
-  const { name } = req.body;
+  const { name, groupId } = req.body;
   if (!name) {
     return res.status(400).json({
       success: false,
@@ -26,7 +27,7 @@ const createNewPresentation = async (req: Request, res: Response) => {
     });
   }
   try {
-    const presentation = await createPresentation(name, userId);
+    const presentation = await createPresentation(name, userId, groupId);
     const slide = await createSlide(presentation.id, '', 0);
     await Promise.all([
       addOptionToSlide(slide.id, 'Option 1'),
@@ -173,15 +174,22 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
 };
 
 const updatePresentationInfo = async (req: Request, res: Response) => {
-  const { id, name } = req.body;
-  if (!id || !name) {
+  const { id, name, isPresent } = req.body;
+  if (!id) {
     return res.status(400).json({
       success: false,
       message: 'Missing information!',
     });
   }
   try {
-    await updatePresentation(id, name);
+    const updateList: Promise<[affectedCount: number]>[] = [];
+    if (name) {
+      updateList.push(updatePresentation(id, name));
+    }
+    if (typeof isPresent !== 'undefined') {
+      updateList.push(updatePresentationStatus(id, isPresent));
+    }
+    await Promise.all(updateList);
     return res.status(200).json({
       succcess: true,
       message: 'Presentation update successfully.',
