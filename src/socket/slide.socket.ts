@@ -1,6 +1,6 @@
 import { Socket, Server } from 'socket.io';
 
-const RoomSocketHandler = (io: Server, socket: Socket) => {
+const SlideSocketHandler = (io: Server, socket: Socket) => {
   socket.on('join room', (roomId) => {
     socket.join(roomId);
     io.to(roomId).emit('join room', `a member join room ${roomId}`);
@@ -27,4 +27,4 @@ const RoomSocketHandler = (io: Server, socket: Socket) => {
   });
 };
 
-export default RoomSocketHandler;
+export default SlideSocketHandler;
