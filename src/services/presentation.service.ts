@@ -43,6 +43,17 @@ const getPresentationByGroup = (groupId: string) => {
   });
 };
 
+const getPresentingInGroup = (groupId: string) => {
+  return models.Presentation.findOne({
+    raw: true,
+    where: {
+      groupId,
+      isPresent: true,
+      isDelete: false,
+    },
+  });
+};
+
 const getPresentationByCode = (inviteCode: string) => {
   return models.Presentation.findOne({
     raw: true,
@@ -109,6 +120,7 @@ export {
   getPresentationById,
   getPresentationByUser,
   getPresentationByGroup,
+  getPresentingInGroup,
   getPresentationByCode,
   createPresentation,
   updatePresentation,

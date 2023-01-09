@@ -12,6 +12,7 @@ import {
   getPresentationByCode,
   getPresentationById,
   getPresentationByUser,
+  getPresentingInGroup,
   getQuestionListByPresentationId,
   updatePresentation,
   updatePresentationStatus,
@@ -173,6 +174,37 @@ const getDetailSlideInPresentation = async (req: Request, res: Response) => {
   }
 };
 
+const getPresentationInGroup = async (req: Request, res: Response) => {
+  const { groupId } = req.params;
+
+  if (!groupId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+
+  try {
+    const presentation = await getPresentingInGroup(groupId);
+    if (!presentation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Presentation does not exist',
+      });
+    }
+
+    return res.status(200).json({
+      succcess: true,
+      presentation,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 const updatePresentationInfo = async (req: Request, res: Response) => {
   const { id, name, isPresent } = req.body;
   if (!id) {
@@ -307,6 +339,7 @@ export {
   getAllPresentation,
   getPresentationDetail,
   getPresentationWithCode,
+  getPresentationInGroup,
   updatePresentationInfo,
   addNewSlide,
   removeSlide,
