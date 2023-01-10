@@ -1,11 +1,6 @@
 import { Socket, Server } from 'socket.io';
 
 const SlideSocketHandler = (io: Server, socket: Socket) => {
-  socket.on('join room', (roomId) => {
-    socket.join(roomId);
-    io.to(roomId).emit('join room', `a member join room ${roomId}`);
-  });
-
   socket.on('update info send', ({ roomId, optionId }) => {
     io.to(roomId).emit('update info receive', { optionId });
   });
