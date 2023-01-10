@@ -9,6 +9,7 @@ import {
 } from '../services/slide.service';
 import {
   createPresentation,
+  disableAllPresentation,
   getPresentationByCode,
   getPresentationById,
   getPresentationByUser,
@@ -17,6 +18,7 @@ import {
   updatePresentation,
   updatePresentationStatus,
 } from '../services/presentation.service';
+import { io } from '../app';
 
 const createNewPresentation = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
@@ -205,6 +207,31 @@ const getPresentationInGroup = async (req: Request, res: Response) => {
   }
 };
 
+const turnOffPresentationInGroup = async (req: Request, res: Response) => {
+  const { groupId } = req.params;
+  const { presentId } = req.body;
+  if (!presentId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing information!',
+    });
+  }
+
+  try {
+    await disableAllPresentation(groupId, presentId);
+    io.to(groupId).emit('stop present');
+    return res.status(200).json({
+      succcess: true,
+      message: 'All presentation stopped.',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 const updatePresentationInfo = async (req: Request, res: Response) => {
   const { id, name, isPresent } = req.body;
   if (!id) {
@@ -340,6 +367,7 @@ export {
   getPresentationDetail,
   getPresentationWithCode,
   getPresentationInGroup,
+  turnOffPresentationInGroup,
   updatePresentationInfo,
   addNewSlide,
   removeSlide,

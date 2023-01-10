@@ -1,6 +1,7 @@
 import { models } from '../models';
 import { v4 as uuidv4 } from 'uuid';
 import { generate } from 'referral-codes';
+import { Op } from 'sequelize';
 
 const getPresentationById = (id: string) => {
   return models.Presentation.findByPk(id, {
@@ -107,6 +108,28 @@ const updatePresentationStatus = (id: string, isPresent: boolean) => {
   );
 };
 
+const disableAllPresentation = (groupId: string, presentId: string) => {
+  return models.Presentation.update(
+    {
+      isPresent: false,
+    },
+    {
+      where: {
+        [Op.and]: [
+          {
+            groupId,
+          },
+          {
+            [Op.not]: {
+              id: presentId,
+            },
+          },
+        ],
+      },
+    },
+  );
+};
+
 const getQuestionListByPresentationId = (id: string) => {
   return models.QuestionInPresentation.findAll({
     raw: true,
@@ -125,5 +148,6 @@ export {
   createPresentation,
   updatePresentation,
   updatePresentationStatus,
+  disableAllPresentation,
   getQuestionListByPresentationId,
 };
