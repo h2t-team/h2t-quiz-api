@@ -7,7 +7,7 @@ import {
   setUserRole,
   inviteUserByEmail,
   checkUserInGroup,
-  setDeleteGroup
+  setDeleteGroup,
 } from '../controllers/group.controller';
 
 const router = Router();

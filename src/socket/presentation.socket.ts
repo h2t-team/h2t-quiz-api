@@ -30,6 +30,13 @@ const PresentationSocketHandler = (io: Server, socket: Socket) => {
       console.log(err);
     }
   });
+
+  socket.on('send message', async function ({ roomId, messageText, username }) {
+    io.to(roomId).emit('receive message', {
+      messageText,
+      username,
+    });
+  });
 };
 
 export default PresentationSocketHandler;
