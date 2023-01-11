@@ -1,5 +1,6 @@
 import { Socket, Server } from 'socket.io';
 import GroupSocketHandler from './group.socket';
+import PresentationSocketHandler from './presentation.socket';
 import SlideSocketHandler from './slide.socket';
 
 const SocketConnectionHandler = (io: Server) => (socket: Socket) => {
@@ -13,6 +14,7 @@ const SocketConnectionHandler = (io: Server) => (socket: Socket) => {
 
     SlideSocketHandler(io, socket);
     GroupSocketHandler(io, socket);
+    PresentationSocketHandler(io, socket);
     socket.on('disconnect', () => {
       // eslint-disable-next-line no-console
       console.log('user disconnected');
