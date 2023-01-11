@@ -17,6 +17,7 @@ import {
   getQuestionListByPresentationId,
   updatePresentation,
   updatePresentationStatus,
+  deletePresentation,
 } from '../services/presentation.service';
 import { io } from '../app';
 
@@ -361,6 +362,40 @@ const getQuestionsInPresentation = async (req: Request, res: Response) => {
   }
 };
 
+const setDeletePresentation = async (req: Request, res: Response) => {
+  try {
+    const { presentationId, isDelete } = req.body;
+
+    const present = await getPresentationById(presentationId);
+    
+    if (!present) {
+      return res.status(404).json({
+        success: false,
+        message: 'Present not found',
+      });
+    }
+
+    if (!presentationId || !isDelete) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing information',
+      });
+    }
+
+    await deletePresentation(presentationId);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Delete presentation successfully',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 export {
   createNewPresentation,
   getAllPresentation,
@@ -374,4 +409,5 @@ export {
   getDetailSlideInPresentation,
   getSlidePreviews,
   getQuestionsInPresentation,
+  setDeletePresentation,
 };
