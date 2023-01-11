@@ -1,7 +1,7 @@
 import { models } from '../models';
 import { v4 as uuidv4 } from 'uuid';
 import { UserInGroupAttributes } from 'models/userInGroup';
-import { Op } from 'sequelize';
+import { Op, where } from 'sequelize';
 import path from 'path';
 import nodemailer from 'nodemailer';
 import hbs from 'nodemailer-express-handlebars';
@@ -22,6 +22,7 @@ const findGroupsByUser = (userId = '') => {
             attributes: ['fullname'],
           },
         ],
+        where: { isDelete: false },
       },
     ],
     where: {
@@ -35,7 +36,7 @@ const findGroupsByUser = (userId = '') => {
 };
 
 const findGroupById = (groupId = '') => {
-  return models.Group.findByPk(groupId, {
+  return models.Group.findOne({
     include: [
       {
         model: models.User,
@@ -60,6 +61,10 @@ const findGroupById = (groupId = '') => {
         },
       },
     ],
+    where: {
+      id: groupId,
+      isDelete: false,
+    },
   });
 };
 
@@ -101,6 +106,19 @@ const setUserRoleInGroup = (
       where: {
         groupId,
         userId,
+      },
+    },
+  );
+};
+
+const deleteGroup = (groupId: string) => {
+  return models.Group.update(
+    {
+      isDelete: true,
+    },
+    {
+      where: {
+        id: groupId,
       },
     },
   );
@@ -166,4 +184,5 @@ export {
   setUserRoleInGroup,
   findUserInGroup,
   sendInvitationEmail,
+  deleteGroup,
 };

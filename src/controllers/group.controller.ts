@@ -8,6 +8,7 @@ import {
   setUserRoleInGroup,
   findUserInGroup,
   sendInvitationEmail,
+  deleteGroup,
 } from '../services/group.service';
 
 const getGroupsByUser = async (req: Request, res: Response) => {
@@ -216,6 +217,39 @@ const setUserRole = async (req: Request, res: Response) => {
   }
 };
 
+const setDeleteGroup = async (req: Request, res: Response) => {
+  try {
+    const { groupId, isDelete } = req.body;
+
+    const group = await findGroupById(groupId);
+    if (!group) {
+      return res.status(404).json({
+        success: false,
+        message: 'Group not found',
+      });
+    }
+
+    if (!groupId || !isDelete) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing information',
+      });
+    }
+
+    await deleteGroup(groupId);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Delete group successfully',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 const inviteUserByEmail = async (req: Request, res: Response) => {
   const { groupId } = req.params;
   const { email } = req.body;
@@ -274,4 +308,5 @@ export {
   setUserRole,
   inviteUserByEmail,
   checkUserInGroup,
+  setDeleteGroup,
 };
