@@ -7,6 +7,7 @@ import {
   setUserRole,
   inviteUserByEmail,
   checkUserInGroup,
+  setDeleteGroup
 } from '../controllers/group.controller';
 
 const router = Router();
@@ -24,5 +25,7 @@ router.post('/:groupId/addUsers', addUsersToExistingGroup);
 router.post('/:groupId/inviteUserByEmail', inviteUserByEmail);
 
 router.put('/:groupId/setUserRole', setUserRole);
+
+router.put('/setDeleteGroup', setDeleteGroup);
 
 export default router;
