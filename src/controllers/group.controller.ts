@@ -250,7 +250,7 @@ const checkUserInGroup = async (req: Request, res: Response) => {
     if (userInGroup) {
       return res.json({
         success: true,
-        message: 'User is in group',
+        user: userInGroup,
       });
     } else {
       return res.status(404).json({

@@ -149,11 +149,25 @@ const loginWithGoogle = async (req: Request, res: Response) => {
     }
     const user = await findUser({ username, email });
     if (user) {
+      const myAccessToken = jwt.sign(
+        {
+          user: {
+            id: user.id,
+            username: user.username,
+          },
+        },
+        config.jwt.accessTokenSecret,
+        { expiresIn: config.jwt.accessTokenExpired },
+      );
+      const myExpiresIn = jwt.verify(
+        myAccessToken,
+        config.jwt.accessTokenSecret,
+      ) as jwt.JwtPayload;
       return res.json({
         success: true,
         message: 'Log in successfully again.',
-        accessToken,
-        expiresIn,
+        accessToken: myAccessToken,
+        expiresIn: myExpiresIn,
       });
     }
     await createUser(
