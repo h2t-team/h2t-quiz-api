@@ -12,6 +12,7 @@ import {
   getQuestionsInPresentation,
   getPresentationInGroup,
   turnOffPresentationInGroup,
+  setDeletePresentation,
 } from '../controllers/presentation.controller';
 
 const router = Router();
@@ -28,5 +29,5 @@ router.get('/:presentId', getPresentationDetail);
 router.get('/:presentId/slidepreviews', getSlidePreviews);
 router.get('/:presentId/questions', getQuestionsInPresentation);
 router.get('/:presentId/:index', getDetailSlideInPresentation);
-
+router.put('/setDeletePresentation', setDeletePresentation);
 export default router;

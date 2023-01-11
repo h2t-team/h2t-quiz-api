@@ -4,7 +4,7 @@ import { generate } from 'referral-codes';
 import { Op } from 'sequelize';
 
 const getPresentationById = (id: string) => {
-  return models.Presentation.findByPk(id, {
+  return models.Presentation.findOne({
     raw: true,
     attributes: ['id', 'name', 'inviteCode', 'isPresent', 'groupId'],
     include: [
@@ -14,6 +14,10 @@ const getPresentationById = (id: string) => {
         attributes: ['name'],
       },
     ],
+    where: {
+      id: id,
+      isDelete: false,
+    },
   });
 };
 
@@ -60,6 +64,7 @@ const getPresentationByCode = (inviteCode: string) => {
     raw: true,
     where: {
       inviteCode,
+      isDelete: false,
     },
   });
 };
@@ -139,6 +144,19 @@ const getQuestionListByPresentationId = (id: string) => {
   });
 };
 
+const deletePresentation = (presentationId: string) => {
+  return models.Presentation.update(
+    {
+      isDelete: true,
+    },
+    {
+      where: {
+        id: presentationId,
+      },
+    },
+  );
+};
+
 export {
   getPresentationById,
   getPresentationByUser,
@@ -150,4 +168,5 @@ export {
   updatePresentationStatus,
   disableAllPresentation,
   getQuestionListByPresentationId,
+  deletePresentation,
 };
