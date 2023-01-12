@@ -2,7 +2,7 @@ import { Socket, Server } from 'socket.io';
 
 const SlideSocketHandler = (io: Server, socket: Socket) => {
   socket.on('update info send', ({ roomId, optionId }) => {
-    io.to(roomId).emit('update info receive', { optionId });
+    socket.broadcast.to(roomId).emit('update info receive', { optionId });
   });
 
   socket.on('change slide', ({ roomId, slideIndex }) => {
@@ -18,7 +18,7 @@ const SlideSocketHandler = (io: Server, socket: Socket) => {
   });
 
   socket.on('receive data', ({ roomId, ...rest }) => {
-    io.to(roomId).emit('receive data', { ...rest });
+    socket.broadcast.to(roomId).emit('receive data', { ...rest });
   });
 };
 

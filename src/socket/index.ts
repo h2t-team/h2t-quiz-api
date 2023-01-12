@@ -7,9 +7,7 @@ const SocketConnectionHandler = (io: Server) => (socket: Socket) => {
   {
     socket.on('join room', (roomId) => {
       socket.join(roomId);
-      socket.broadcast
-        .to(roomId)
-        .emit('join room', `a member join room ${roomId}`);
+      io.to(roomId).emit('join room', `a member join room ${roomId}`);
     });
 
     SlideSocketHandler(io, socket);
